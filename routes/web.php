@@ -7,16 +7,13 @@ use App\Http\Controllers\StudentController;
 use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Support\Facades\Route;
 
-// Public Routes (Anyone can access)
 Route::get('/login', [LoginController::class, 'showLogin'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-// Allow guests to view books but restrict downloads
 Route::get('/', [BookController::class, 'index'])->name('book');
 Route::get('/book/{id}', [BookController::class, 'show'])->name('books.show');
 
-// Student Routes (Only for authenticated students)
 Route::middleware(['auth:student', RoleMiddleware::class . ':student'])->group(function () {
     Route::get('/book/download/{id}', [BookController::class, 'download'])->name('books.download');
 });

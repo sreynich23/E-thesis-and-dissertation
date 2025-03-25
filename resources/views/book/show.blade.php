@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NUBB Finish The Dissertation</title>
+    <title>E-thesis and dissertation</title>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
@@ -14,11 +14,10 @@
 </head>
 
 <body x-data="{ Major: 'Major', Generation: 'Generation', Year: 'Year', search: '', showProfile: false }">
-    <nav class="border-b text-black py-2 sticky bg-green-700">
-        <div class="flex justify-between items-start px-6 pt-3">
-            <img src="{{ asset('storage/logo/logo.png') }}" alt="" class="w-36">
+    <nav class="border-b text-black sticky">
+        <img src="{{ asset('storage/logo/navbar.jpg' ) }}" class="w-full">
+        <div class="flex justify-between items-start px-6 pt-3 bg-[url('storage/logo/navbar2.png')] bg-cover bg-center">
             <div class="space-y-4">
-                <h1 class="text-xl font-bold text-white">NUBB-THESIS & DISSERTATION DIGITAL CENTER</h1>
                 <div class="flex items-center space-x-4">
                     <!-- Generation Dropdown -->
                     <div class="relative" x-data="{ open: false }">

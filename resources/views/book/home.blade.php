@@ -18,12 +18,10 @@
     @else
         studentName: 'Guest',studentId: 'N/A' @endif }" class="w-screen h-full">
 
-    <nav class="border-b text-black py-2 sticky bg-green-700 ">
-        <div class="flex justify-between items-start px-6 pt-3">
-            <img src="{{ asset('storage/logo/logo.png') }}" alt="" class="w-36">
-            <div class="space-y-4">
-                <h1 class="text-xl font-bold text-white">NUBB-THESIS & DISSERTATION DIGITAL CENTER</h1>
-                <div class="flex items-center space-x-4 w-full">
+    <nav class="border-b text-black sticky z-10">
+        <div class="flex justify-between items-start h-20 lg:h-80" style="background-image: url('{{ asset('storage/logo/navbar.png') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+            <div class="space-y-4 absolute bottom-0 lg:bottom-4 left-1/2 transform -translate-x-1/2">
+                <div class="flex items-center space-x-4 justify-self-center">
                     <!-- Generation Dropdown -->
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = !open"
@@ -51,7 +49,7 @@
                     <!-- Major Dropdown -->
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = !open"
-                            class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-white lg:py-2 lg:px-3 rounded-md lg:w-36 justify-between">
+                            class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-white p-1 lg:py-2 lg:px-3 rounded-md lg:w-36 justify-between">
                             <span x-text="Major"></span>
                             <svg class="ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd"
@@ -84,7 +82,7 @@
                             </svg>
                         </button>
                         <div x-show="open" @click.away="open = false"
-                            class="absolute right-0 lg:mt-2 lg:w-48 bg-white rounded-md shadow-lg py-1 z-10 overflow-y-auto min-h-full max-h-min h-40">
+                            class="absolute right-0 lg:mt-2 lg:w-48 bg-white rounded-md shadow-lg py-1 z-10 overflow-y-auto min-h-full max-h-min h-40 ">
                             <div class="space-y-1">
                                 @foreach ($years as $year => $value)
                                     <a @click="Year = '{{ $year }}'; open = false"
@@ -100,7 +98,7 @@
                 <input type="text" x-model="search" placeholder="🔍Search..."
                     class="px-4 py-2 border rounded-md text-black w-full">
             </div>
-            <div class="space-x-4 flex items-center">
+            <div class="space-x-4 flex items-center absolute top-1 lg:top-4 right-4 lg:right-12 transform">
                 @if (Auth::check())
                     <button @click="showProfile = !showProfile">
                         <i class="fas fa-user text-white"></i>
@@ -113,30 +111,29 @@
                     </form>
                 @else
                     <a href="{{ route('login') }}"
-                        class="bg-green-500 hover:bg-green-600 text-white p-2 rounded-lg">Login</a>
+                        class="lg:bg-green-500 hover:bg-green-600 text-white lg:p-2 lg:rounded-lg lg:text-base text-xs">Login</a>
                 @endif
             </div>
         </div>
     </nav>
 
-    <!-- Profile Modal (Hidden/Shown based on showProfile variable) -->
-    <div x-show="showProfile" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
-        @click.away="showProfile = false">
-        <div class="bg-white p-6 rounded-md shadow-lg w-96" @click.stop>
-            <h2 class="text-2xl font-bold mb-4">Student Profile</h2>
-            <p><strong>Name:</strong> <span x-text="studentName"></span></p>
-            <p><strong>ID:</strong> <span x-text="studentId"></span></p>
-            <button @click="showProfile = false" class="mt-4 bg-red-500 text-white px-4 py-2 rounded-md">Close</button>
-        </div>
-    </div>
-    @foreach ($covers as $cover)
-        @if ($cover->id == 1)
-            <div class="w-3/5 h-full justify-self-center m-6">
-                <img src="{{ asset('storage/' . $cover->image_path) }}" alt="">
+    <div class="w-3/5 shadow-lg justify-self-center">
+        <!-- Image Slider -->
+        @if ($covers->isNotEmpty())
+            <div class="w-full overflow-hidden relative flex items-center justify-center ">
+                <div id="slider" class="slider flex transition-transform duration-300 ease-in-out">
+                    @foreach ($covers as $cover)
+                        <div class="w-full flex-shrink-0">
+                            <img src="{{ asset('storage/' . $cover->image_path) }}" alt="Cover Image"
+                                class="w-full h-auto">
+                        </div>
+                    @endforeach
+                </div>
             </div>
+        @else
+            <p class="text-center text-gray-500">No images uploaded yet.</p>
         @endif
-    @endforeach
-
+    </div>
     <!-- Books Display -->
     <div class="w-full lg:w-full p-6">
         @foreach ($groupedBooks as $id_majors => $books)
@@ -167,5 +164,19 @@
     </div>
 
 </body>
+<script>
+    const slider = document.getElementById('slider');
+    if (slider) {
+        const slides = slider.children;
+        let currentIndex = 0;
+
+        function showNextSlide() {
+            currentIndex = (currentIndex + 1) % slides.length;
+            slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+        }
+
+        setInterval(showNextSlide, 5000);
+    }
+</script>
 
 </html>
