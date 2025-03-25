@@ -14,27 +14,24 @@
 </head>
 
 <body x-data="{ Major: 'Major', Generation: 'Generation', Year: 'Year', search: '', showProfile: false }">
-    <nav class="border-b text-black sticky z-10">
-        <div class="flex justify-between items-start h-20 lg:h-80" style="background-image: url('{{ asset('storage/logo/navbar.png') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
-            <div class="space-y-4 absolute bottom-0 lg:bottom-4 left-1/2 transform -translate-x-1/2">
-                <div class="flex items-center space-x-4 justify-self-center">
+    <nav class="border-b text-black sticky">
+        <img src="{{ asset('storage/logo/navbar.jpg') }}" class="w-full">
+        <div class="flex justify-between items-center px-6 pt-3 bg-[url('storage/logo/navbar2.png')] bg-cover bg-center">
+            <!-- Left Side for Generation, Major, Year Dropdowns and Search Input -->
+            <div class="space-y-4 w-full md:w-auto">
+                <div class="flex items-center lg:space-x-4 space-x-2 justify-self-center">
                     <!-- Generation Dropdown -->
                     <div class="relative" x-data="{ open: false }">
-                        <button @click="open = !open"
-                            class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-white lg:py-2 lg:px-3 rounded-md lg:w-36 justify-between">
+                        <button @click="open = !open" class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-red-800 text-white lg:py-2 lg:px-10 lg:rounded-md p-1">
                             <span x-text="Generation"></span>
                             <svg class="ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clip-rule="evenodd" />
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                             </svg>
                         </button>
-                        <div x-show="open" @click.away="open = false"
-                            class="absolute right-0 lg:mt-2 lg:w-48 bg-white rounded-md shadow-lg py-1 z-10 overflow-y-auto min-h-full max-h-min h-40">
+                        <div x-show="open" @click.away="open = false" class="absolute right-0 lg:mt-2 lg:w-48 bg-white lg:rounded-md shadow-lg py-1 z-10 overflow-y-auto min-h-full max-h-min h-40">
                             <div class="space-y-1">
                                 @foreach ($generations as $generation => $value)
-                                    <a @click="Generation = '{{ $generation }}'; open = false"
-                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md">
+                                    <a @click="Generation = '{{ $generation }}'; open = false" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 lg:rounded-md">
                                         {{ $generation }}
                                     </a>
                                 @endforeach
@@ -44,21 +41,16 @@
 
                     <!-- Major Dropdown -->
                     <div class="relative" x-data="{ open: false }">
-                        <button @click="open = !open"
-                            class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-white p-1 lg:py-2 lg:px-3 rounded-md lg:w-36 justify-between">
+                        <button @click="open = !open" class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-red-800 text-white lg:py-2 lg:px-10 lg:rounded-md p-1">
                             <span x-text="Major"></span>
                             <svg class="ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clip-rule="evenodd" />
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                             </svg>
                         </button>
-                        <div x-show="open" @click.away="open = false"
-                            class="absolute right-0 lg:mt-2 lg:w-64 bg-white rounded-md shadow-lg py-1 z-10 overflow-y-auto min-h-full max-h-min h-64">
+                        <div x-show="open" @click.away="open = false" class="absolute right-0 lg:mt-2 lg:w-48 bg-white lg:rounded-md shadow-lg py-1 z-10 overflow-y-auto min-h-full max-h-min h-40">
                             <div class="space-y-1">
                                 @foreach ($majors as $major)
-                                    <a @click="Major = '{{ $major->major_name }}'; open = false"
-                                        class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 rounded-md">
+                                    <a @click="Major = '{{ $major->major_name }}'; open = false" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 lg:rounded-md">
                                         {{ $major->major_name }}-{{ $major->khmer_name }}
                                     </a>
                                 @endforeach
@@ -68,47 +60,56 @@
 
                     <!-- Year Dropdown -->
                     <div class="relative" x-data="{ open: false }">
-                        <button @click="open = !open"
-                            class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-white lg:py-2 lg:px-3 rounded-md lg:w-36 justify-between">
+                        <button @click="open = !open" class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-red-800 text-white lg:py-2 lg:px-10 lg:rounded-md p-1">
                             <span x-text="Year"></span>
                             <svg class="ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clip-rule="evenodd" />
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                             </svg>
                         </button>
-                        <div x-show="open" @click.away="open = false"
-                            class="absolute right-0 lg:mt-2 lg:w-48 bg-white rounded-md shadow-lg py-1 z-10 overflow-y-auto min-h-full max-h-min h-40 ">
+                        <div x-show="open" @click.away="open = false" class="absolute right-0 lg:mt-2 lg:w-48 bg-white lg:rounded-md shadow-lg py-1 z-10 overflow-y-auto h-40">
                             <div class="space-y-1">
                                 @foreach ($years as $year => $value)
-                                    <a @click="Year = '{{ $year }}'; open = false"
-                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md">
+                                    <a @click="Year = '{{ $year }}'; open = false" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 lg:rounded-md">
                                         {{ $year }}
                                     </a>
                                 @endforeach
                             </div>
                         </div>
                     </div>
+                    <!-- Search Input -->
+                    <input type="text" x-model="search" placeholder="Search..." class="px-4 py-2 border-red-800 border-2 lg:rounded-md text-black w-full md:w-auto lg:w-80">
                 </div>
-                <!-- Search Input -->
-                <input type="text" x-model="search" placeholder="🔍Search..."
-                    class="px-4 py-2 border rounded-md text-black w-full">
             </div>
-            <div class="space-x-4 flex items-center absolute top-1 lg:top-4 right-4 lg:right-12 transform">
-                @if (Auth::check())
-                    <button @click="showProfile = !showProfile">
-                        <i class="fas fa-user text-white"></i>
-                    </button>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg">
-                            <i class="fas fa-sign-out-alt"></i>
+
+            <!-- Mobile Hamburger Menu Button -->
+            <div class="block md:hidden">
+                <button @click="mobileMenu = !mobileMenu" class="text-white p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Menu -->
+        <div x-show="mobileMenu" class="block md:hidden bg-white shadow-md py-4">
+            <div class="space-y-4">
+                <div class="px-6">
+                    <div class="relative">
+                        <button @click="open = !open" class="flex items-center text-xs md:text-sm lg:text-base bg-white lg:py-2 lg:px-3 rounded-md">
+                            <span x-text="Generation"></span>
                         </button>
-                    </form>
-                @else
-                    <a href="{{ route('login') }}"
-                        class="lg:bg-green-500 hover:bg-green-600 text-white lg:p-2 lg:rounded-lg lg:text-base text-xs">Login</a>
-                @endif
+                        <div x-show="open" @click.away="open = false" class="absolute right-0 lg:mt-2 lg:w-48 bg-white rounded-md shadow-lg py-1 z-10 overflow-y-auto h-40">
+                            <div class="space-y-1">
+                                @foreach ($generations as $generation => $value)
+                                    <a @click="Generation = '{{ $generation }}'; open = false" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md">
+                                        {{ $generation }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -138,11 +139,11 @@
             </div>
 
             @if ($book->path_file && Storage::disk('public')->exists($book->path_file))
-                <embed src="{{ asset('storage/' . $book->path_file) }}#toolbar=0" type="application/pdf"
-                    class="w-3/5 h-full border-none justify-self-center bg-white p-4" />
-            @else
-                <p class="text-red-500">The requested resource was not found on this server.</p>
-            @endif
+            <embed src="{{ asset('storage/' . $book->path_file) }}#toolbar=0" type="application/pdf"
+                class="w-full h-96 lg:h-full border-none justify-self-center bg-white p-4" />
+        @else
+            <p class="text-red-500">The requested resource was not found on this server.</p>
+        @endif
         </div>
         <div class="w-2/6">
             <input type="text" x-model="search" placeholder="Search..."
@@ -161,17 +162,17 @@
                             <a href="{{ route('books.show', $book->id) }}"
                                 class="bg-white shadow-lg w-10 lg:w-20 flex-shrink-0"
                                 x-show="(Generation === '{{ $book->generation }}' || Generation === 'Generation') &&
-                                        (Year === '{{ $book->year }}' || Year === 'Year') &&
-                                        (search === '' || '{{ strtolower($book->title) }}'.includes(search.toLowerCase()))">
-                                <img src="{{ asset('storage/' . $book->cover) }}" alt="Cover of {{ $book->title }}"
-                                    class="w-full object-cover mb-4">
-                                <h2 class="font-semibold text-lg text-gray-800 p-1">{{ $book->title }}</h2>
+                                        (Year === '{{ $book->year }}' || Year === 'Year')">
+                                <img src="{{ asset('storage/' . $book->cover) }}" class="w-full lg:h-32 object-cover mb-2"
+                                    alt="Book Image">
+                                <p class="text-center text-sm">{{ Str::limit($book->title, 10) }}</p>
                             </a>
                         @endforeach
                     </div>
                 </div>
             @endforeach
         </div>
+    </div>
     </div>
 </body>
 
