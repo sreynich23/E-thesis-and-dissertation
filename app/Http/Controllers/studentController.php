@@ -17,10 +17,12 @@ class studentController extends Controller
 
     public function create(Request $request)
     {
+        $expiredAt = now()->addYear();
         $student = Student::create([
             'name' => $request->name,
             'password' => Hash::make($request->password),
             'id_number' => $request->id_number,
+            'expired_at' => $expiredAt,
         ]);
         $student->save();
 
