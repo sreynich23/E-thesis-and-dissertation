@@ -14,15 +14,14 @@
 </head>
 
 <body x-data="{ Major: 'Major', Generation: 'Generation', Year: 'Year', search: '', showProfile: false }">
-    <nav class="border-b text-black sticky">
-        <img src="{{ asset('storage/logo/navbar.jpg' ) }}" class="w-full">
-        <div class="flex justify-between items-start px-6 pt-3 bg-[url('storage/logo/navbar2.png')] bg-cover bg-center">
-            <div class="space-y-4">
-                <div class="flex items-center space-x-4">
+    <nav class="border-b text-black sticky z-10">
+        <div class="flex justify-between items-start h-20 lg:h-80" style="background-image: url('{{ asset('storage/logo/navbar.png') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+            <div class="space-y-4 absolute bottom-0 lg:bottom-4 left-1/2 transform -translate-x-1/2">
+                <div class="flex items-center space-x-4 justify-self-center">
                     <!-- Generation Dropdown -->
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = !open"
-                            class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-white lg:py-2 lg:px-3 rounded-md">
+                            class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-white lg:py-2 lg:px-3 rounded-md lg:w-36 justify-between">
                             <span x-text="Generation"></span>
                             <svg class="ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd"
@@ -46,7 +45,7 @@
                     <!-- Major Dropdown -->
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = !open"
-                            class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-white lg:py-2 lg:px-3 rounded-md">
+                            class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-white p-1 lg:py-2 lg:px-3 rounded-md lg:w-36 justify-between">
                             <span x-text="Major"></span>
                             <svg class="ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd"
@@ -55,11 +54,11 @@
                             </svg>
                         </button>
                         <div x-show="open" @click.away="open = false"
-                            class="absolute right-0 lg:mt-2 lg:w-48 bg-white rounded-md shadow-lg py-1 z-10 overflow-y-auto min-h-full max-h-min h-40">
+                            class="absolute right-0 lg:mt-2 lg:w-64 bg-white rounded-md shadow-lg py-1 z-10 overflow-y-auto min-h-full max-h-min h-64">
                             <div class="space-y-1">
                                 @foreach ($majors as $major)
                                     <a @click="Major = '{{ $major->major_name }}'; open = false"
-                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md">
+                                        class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 rounded-md">
                                         {{ $major->major_name }}-{{ $major->khmer_name }}
                                     </a>
                                 @endforeach
@@ -70,7 +69,7 @@
                     <!-- Year Dropdown -->
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = !open"
-                            class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-white lg:py-2 lg:px-3 rounded-md">
+                            class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-white lg:py-2 lg:px-3 rounded-md lg:w-36 justify-between">
                             <span x-text="Year"></span>
                             <svg class="ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd"
@@ -79,7 +78,7 @@
                             </svg>
                         </button>
                         <div x-show="open" @click.away="open = false"
-                            class="absolute right-0 lg:mt-2 lg:w-48 bg-white rounded-md shadow-lg py-1 z-10 overflow-y-auto h-40">
+                            class="absolute right-0 lg:mt-2 lg:w-48 bg-white rounded-md shadow-lg py-1 z-10 overflow-y-auto min-h-full max-h-min h-40 ">
                             <div class="space-y-1">
                                 @foreach ($years as $year => $value)
                                     <a @click="Year = '{{ $year }}'; open = false"
@@ -90,17 +89,16 @@
                             </div>
                         </div>
                     </div>
-                    <input type="text" x-model="search" placeholder="Search..."
-                        class="px-4 py-2 border rounded-md text-black">
                 </div>
+                <!-- Search Input -->
+                <input type="text" x-model="search" placeholder="🔍Search..."
+                    class="px-4 py-2 border rounded-md text-black w-full">
             </div>
-            <div class="space-x-4 flex items-center">
+            <div class="space-x-4 flex items-center absolute top-1 lg:top-4 right-4 lg:right-12 transform">
                 @if (Auth::check())
-                    <!-- Profile Icon -->
                     <button @click="showProfile = !showProfile">
                         <i class="fas fa-user text-white"></i>
                     </button>
-                    <!-- Logout Button -->
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg">
@@ -109,9 +107,8 @@
                     </form>
                 @else
                     <a href="{{ route('login') }}"
-                        class="bg-green-500 hover:bg-green-600 text-white p-2 rounded-lg">Login</a>
+                        class="lg:bg-green-500 hover:bg-green-600 text-white lg:p-2 lg:rounded-lg lg:text-base text-xs">Login</a>
                 @endif
-
             </div>
         </div>
     </nav>
