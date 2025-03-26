@@ -154,7 +154,7 @@
                     $major = App\Models\Major::find($id_majors);
                 @endphp
                 <div x-show="Major === '{{ $major ? $major->major_name : 'Unknown Major' }}' || Major === 'Major'">
-                    <h1 class="text-3xl font-bold text-cyan-500 mb-6">
+                    <h1 class="text-base md:text-xl lg:text-3xl font-bold text-cyan-500 mb-6">
                         {{ $major ? $major->major_name : 'Unknown Major' }}
                     </h1>
                     <div class="gap-2 grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
