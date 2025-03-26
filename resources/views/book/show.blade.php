@@ -120,30 +120,29 @@
 
     <div class="flex">
         <div class="container mx-auto p-6 h-screen w-4/6">
-            <div class="flex justify-between items-center mb-4">
-                <h1 class="text-3xl font-bold text-cyan-500 mb-4">{{ $book->title }}</h1>
+            <div class="flex justify-between items-center mb-4 bg-white">
+                <h1 class="text-base md:text-xl lg:text-3xl font-bold text-cyan-500 mb-4">{{ $book->title }}</h1>
                 @if (Auth::check())
                     <a href="{{ route('books.download', $book->id) }}" class="pr-20">
-                        <button class="bg-blue-500 text-white px-4 py-2 rounded-md">
+                        <button class="bg-blue-500 text-white lg:px-4 lg:py-2 px-2 py-1 rounded-md text-xs md:text-sm lg:text-lg">
                             Download
                         </button>
                     </a>
                 @else
                     <a href="{{ route('login') }}" class="pr-20">
-                        <button class="bg-blue-500 text-white px-4 py-2 rounded-md">
+                        <button class="bg-blue-500 text-white lg:px-4 lg:py-2 px-2 py-1 rounded-md text-xs md:text-sm lg:text-lg">
                             Download
                         </button>
                     </a>
                 @endif
-
             </div>
 
             @if ($book->path_file && Storage::disk('public')->exists($book->path_file))
-            <embed src="{{ asset('storage/' . $book->path_file) }}#toolbar=0" type="application/pdf"
-                class="w-full h-96 lg:h-full border-none justify-self-center bg-white p-4" />
-        @else
-            <p class="text-red-500">The requested resource was not found on this server.</p>
-        @endif
+            <embed src="{{ asset('storage/' . $book->path_file) }}#toolbar=0&zoom=FitH" type="application/pdf"
+                class="h-96 lg:w-full lg:h-full border-none justify-self-center bg-white" />
+            @else
+                <p class="text-red-500">The requested resource was not found on this server.</p>
+            @endif
         </div>
         <div class="w-2/6">
             <input type="text" x-model="search" placeholder="Search..."
