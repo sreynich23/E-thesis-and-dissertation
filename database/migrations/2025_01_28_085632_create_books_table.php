@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_majors');  // Foreign key for majors
             $table->unsignedBigInteger('id_generation');  // Foreign key for generation
             $table->string('title');  // File path for the cover image
-            $table->string('cover');  // File path for the cover image
+            $table->string('cover')->nullable();  // File path for the cover image
             $table->string('path_file');  // File path for the book (PDF, etc.)
             $table->timestamps();  // created_at and updated_at timestamps
 
