@@ -10,7 +10,7 @@ use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-
+use setasign\Fpdi\Tcpdf\Fpdi;
 
 class BookController extends Controller
 {
@@ -24,7 +24,7 @@ class BookController extends Controller
         $groupedBooks = Book::all()->groupBy('id_majors');
         $students = Student::all();
         $covers = Cover::all();
-        return view('book.home', compact('books', 'groupedMajors', 'students', 'majors', 'groupedBooks', 'generations', 'years','covers'));
+        return view('book.home', compact('books', 'groupedMajors', 'students', 'majors', 'groupedBooks', 'generations', 'years', 'covers'));
     }
     public function show($id)
     {
@@ -47,7 +47,7 @@ class BookController extends Controller
         $groupedBooks = Book::all()->groupBy('id_majors');
         $students = Student::all();
         $covers = Cover::all();
-        return view('admin.dashboard', compact('books', 'groupedMajors', 'students', 'majors', 'groupedBooks', 'generations', 'years','covers'));
+        return view('admin.dashboard', compact('books', 'groupedMajors', 'students', 'majors', 'groupedBooks', 'generations', 'years', 'covers'));
     }
     public function showAdmin($id)
     {
@@ -62,7 +62,6 @@ class BookController extends Controller
             'id_majors' => 'required|integer',
             'generations' => 'required|string',
             'year' => 'required|integer',
-            'cover' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
             'path_file' => 'nullable|file|mimes:pdf|max:10240',
         ]);
 
@@ -77,7 +76,6 @@ class BookController extends Controller
             'id_majors' => $request->id_majors,
             'generation' => $request->generations,
             'year' => $request->year,
-            'cover' => $request->hasFile('cover') ? $request->file('cover')->store('covers', 'public') : null,
             'path_file' => $request->hasFile('path_file') ? $request->file('path_file')->store('pdf_books', 'public') : null,
         ]);
 
@@ -121,19 +119,20 @@ class BookController extends Controller
     }
 
     public function download($id)
-{
-    $book = Book::findOrFail($id);
+    {
+        $book = Book::findOrFail($id);
 
-    if (!$book->path_file) {
-        return redirect()->back()->with('error', 'File not found.');
+        if (!$book->path_file) {
+            return redirect()->back()->with('error', 'File not found.');
+        }
+
+        $filePath = public_path('storage/' . $book->path_file);
+
+        if (!file_exists($filePath)) {
+            return redirect()->back()->with('error', 'File not found.');
+        }
+
+        return response()->download($filePath, $book->title . '.pdf');
     }
 
-    $filePath = public_path('storage/' . $book->path_file);
-
-    if (!file_exists($filePath)) {
-        return redirect()->back()->with('error', 'File not found.');
-    }
-
-    return response()->download($filePath, $book->title . '.pdf');
-}
 }

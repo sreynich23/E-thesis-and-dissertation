@@ -139,7 +139,7 @@
             </div>
 
             @if ($book->path_file && Storage::disk('public')->exists($book->path_file))
-            <embed src="{{ asset('storage/' . $book->path_file) }}#toolbar=0&zoom=FitH" type="application/pdf"
+            <embed src="{{ asset('storage/' . $book->path_file) }}" type="application/pdf"
                 class="h-96 lg:w-full lg:h-full border-none justify-self-center bg-white" />
             @else
                 <p class="text-red-500">The requested resource was not found on this server.</p>
@@ -163,8 +163,17 @@
                                 class="bg-white shadow-lg w-10 lg:w-20 flex-shrink-0"
                                 x-show="(Generation === '{{ $book->generation }}' || Generation === 'Generation') &&
                                         (Year === '{{ $book->year }}' || Year === 'Year')">
-                                <img src="{{ asset('storage/' . $book->cover) }}" class="w-full lg:h-32 object-cover mb-2"
-                                    alt="Book Image">
+                                        @if ($book->path_file && Storage::disk('public')->exists($book->path_file))
+                                        <div style="overflow: hidden;">
+                                            <embed
+                                                src="{{ asset('storage/' . $book->path_file) }}#toolbar=0&navpanes=0&scrollbar=0&zoom=FitH"
+                                                type="application/pdf"
+                                                class="h-60 border-none justify-self-center bg-white"
+                                                style="pointer-events: none;" />
+                                        </div>
+                                    @else
+                                        <p class="text-red-500">The requested resource was not found on this server.</p>
+                                    @endif
                                 <p class="text-center text-sm">{{ Str::limit($book->title, 10) }}</p>
                             </a>
                         @endforeach

@@ -13,7 +13,6 @@ class Book extends Model
         'generation',
         'year',
         'title',
-        'cover',
         'path_file',
     ];
 

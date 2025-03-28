@@ -42,8 +42,17 @@
             <div class="gap-2 overflow-x-auto flex space-x-1 pb-4">
                 @foreach ($books as $book)
                     <div class="bg-white shadow-lg w-28 lg:w-40 flex-shrink-0">
-                        <img src="{{ asset('storage/' . $book->cover) }}" alt="Cover of {{ $book->title }}"
-                            class="w-full object-cover mb-4">
+                        @if ($book->path_file && Storage::disk('public')->exists($book->path_file))
+                                <div style="overflow: hidden;">
+                                    <embed
+                                        src="{{ asset('storage/' . $book->path_file) }}#toolbar=0&navpanes=0&scrollbar=0&zoom=FitH"
+                                        type="application/pdf"
+                                        class="h-60 border-none justify-self-center bg-white"
+                                        style="pointer-events: none;" />
+                                </div>
+                            @else
+                                <p class="text-red-500">The requested resource was not found on this server.</p>
+                            @endif
 
                         <h2 class="font-semibold text-lg text-gray-800 p-1">{{ $book->title }}</h2>
                     </div>

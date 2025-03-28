@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NUBB Finish The Dissertation</title>
+    <title>E-Thesis&dissertation</title>
     <link rel="icon" type="image/png" href="{{ asset('storage/logo/logo.jpg') }}">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
@@ -44,16 +44,21 @@
         <div class="flex items-center lg:space-x-4 space-x-2 justify-self-center">
             <!-- Generation Dropdown -->
             <div class="relative" x-data="{ open: false }">
-                <button @click="open = !open" class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-red-800 text-white lg:py-2 lg:px-10 lg:rounded-md p-1">
+                <button @click="open = !open"
+                    class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-red-800 text-white lg:py-2 lg:px-10 lg:rounded-md p-1">
                     <span x-text="Generation"></span>
                     <svg class="ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        <path fill-rule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clip-rule="evenodd" />
                     </svg>
                 </button>
-                <div x-show="open" @click.away="open = false" class="absolute right-0 lg:mt-2 lg:w-48 bg-white lg:rounded-md shadow-lg py-1 z-10 overflow-y-auto min-h-full max-h-min h-40">
+                <div x-show="open" @click.away="open = false"
+                    class="absolute right-0 lg:mt-2 lg:w-48 bg-white lg:rounded-md shadow-lg py-1 z-10 overflow-y-auto min-h-full max-h-min h-40">
                     <div class="space-y-1">
                         @foreach ($generations as $generation => $value)
-                            <a @click="Generation = '{{ $generation }}'; open = false" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 lg:rounded-md">
+                            <a @click="Generation = '{{ $generation }}'; open = false"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 lg:rounded-md">
                                 {{ $generation }}
                             </a>
                         @endforeach
@@ -63,16 +68,21 @@
 
             <!-- Major Dropdown -->
             <div class="relative" x-data="{ open: false }">
-                <button @click="open = !open" class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-red-800 text-white lg:py-2 lg:px-10 lg:rounded-md p-1">
+                <button @click="open = !open"
+                    class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-red-800 text-white lg:py-2 lg:px-10 lg:rounded-md p-1">
                     <span x-text="Major"></span>
                     <svg class="ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        <path fill-rule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clip-rule="evenodd" />
                     </svg>
                 </button>
-                <div x-show="open" @click.away="open = false" class="absolute right-0 lg:mt-2 lg:w-72 bg-white lg:rounded-md shadow-lg py-1 z-10 overflow-y-auto min-h-full max-h-min h-40">
+                <div x-show="open" @click.away="open = false"
+                    class="absolute right-0 lg:mt-2 lg:w-72 bg-white lg:rounded-md shadow-lg py-1 z-10 overflow-y-auto min-h-full max-h-min h-40">
                     <div class="space-y-1">
                         @foreach ($majors as $major)
-                            <a @click="Major = '{{ $major->major_name }}'; open = false" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 lg:rounded-md">
+                            <a @click="Major = '{{ $major->major_name }}'; open = false"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 lg:rounded-md">
                                 {{ $major->major_name }}-{{ $major->khmer_name }}
                             </a>
                         @endforeach
@@ -82,16 +92,21 @@
 
             <!-- Year Dropdown -->
             <div class="relative" x-data="{ open: false }">
-                <button @click="open = !open" class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-red-800 text-white lg:py-2 lg:px-10 lg:rounded-md p-1">
+                <button @click="open = !open"
+                    class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-red-800 text-white lg:py-2 lg:px-10 lg:rounded-md p-1">
                     <span x-text="Year"></span>
                     <svg class="ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        <path fill-rule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clip-rule="evenodd" />
                     </svg>
                 </button>
-                <div x-show="open" @click.away="open = false" class="absolute right-0 lg:mt-2 lg:w-48 bg-white lg:rounded-md shadow-lg py-1 z-10 overflow-y-auto h-40">
+                <div x-show="open" @click.away="open = false"
+                    class="absolute right-0 lg:mt-2 lg:w-48 bg-white lg:rounded-md shadow-lg py-1 z-10 overflow-y-auto h-40">
                     <div class="space-y-1">
                         @foreach ($years as $year => $value)
-                            <a @click="Year = '{{ $year }}'; open = false" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 lg:rounded-md">
+                            <a @click="Year = '{{ $year }}'; open = false"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 lg:rounded-md">
                                 {{ $year }}
                             </a>
                         @endforeach
@@ -99,7 +114,8 @@
                 </div>
             </div>
             <!-- Search Input -->
-            <input type="text" x-model="search" placeholder="Search..." class="px-4 py-2 border-red-800 border-2 lg:rounded-md text-black w-full md:w-auto lg:w-80">
+            <input type="text" x-model="search" placeholder="Search..."
+                class="px-4 py-2 border-red-800 border-2 lg:rounded-md text-black w-full md:w-auto lg:w-80">
         </div>
     </div>
 
@@ -131,7 +147,7 @@
             <div x-show="Major === '{{ $major ? $major->major_name : 'Unknown Major' }}' || Major === 'Major'">
                 <h1 class="text-3xl font-bold text-cyan-500 mb-6">{{ $major ? $major->major_name : 'Unknown Major' }}
                 </h1>
-                <div class="gap-2 overflow-x-auto flex space-x-1 pb-4">
+                <div class="gap-2 overflow-x-auto flex space-x-1 pb-4 grid-cols-5">
                     @foreach ($books as $book)
                         <a href="{{ route('books.show', $book->id) }}"
                             class="bg-white shadow-lg w-28 lg:w-40 flex-shrink-0"
@@ -139,9 +155,19 @@
                                 (Year === '{{ $book->year }}' || Year === 'Year')
 &&
                                 (search === '' || '{{ strtolower($book->title) }}'.includes(search.toLowerCase()))">
-                            <img src="{{ asset('storage/' . $book->cover) }}" alt="Cover of {{ $book->title }}"
-                                class="w-full object-cover mb-4">
-                            <h2 class="font-semibold text-lg text-gray-800 p-1">{{ $book->title }}</h2>
+                            @if ($book->path_file && Storage::disk('public')->exists($book->path_file))
+                                <div style="overflow: hidden;">
+                                    <embed
+                                        src="{{ asset('storage/' . $book->path_file) }}#navpanes=0&scrollbar=0&view=FitH&page=1"
+                                        type="application/pdf"
+                                        class="h-48 lg:h-60 border-none justify-self-center bg-white"
+                                        style="pointer-events: none;" />
+                                </div>
+                            @else
+                                <p class="text-red-500">The requested resource was not found on this server.</p>
+                            @endif
+
+                            <h2 class="font-medium text-xs md:text-sm lg:text-base text-gray-800 p-1">{{ $book->title }}</h2>
                         </a>
                     @endforeach
                 </div>

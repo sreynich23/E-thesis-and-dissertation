@@ -41,8 +41,8 @@ class MajorSeeder extends Seeder
             ['major_name' => 'English Teaching', 'degree_level' => 'Master', 'khmer_name' => 'បង្រៀនភាសាអង់គ្លេស'],
             ['major_name' => 'Sustainable Agriculture', 'degree_level' => 'Master', 'khmer_name' => 'និរន្តរភាពកសិកម្ម'],
             ['major_name' => 'Ecology Management Systems', 'degree_level' => 'Master', 'khmer_name' => 'និរន្តរភាពនៃការគ្រប់គ្រងប្រព័ន្ធ អេកូឡូស៊ី'],
-            ['major_name' => 'Education Management', 'degree_level' => 'Doctoral', 'khmer_name' => 'គ្រប់គ្រងអប់រំ'],
-            ['major_name' => 'Ecology', 'degree_level' => 'Doctoral', 'khmer_name' => 'អេកូឡូសី'],
+            ['major_name' => 'Education Management', 'degree_level' => 'PhD', 'khmer_name' => 'គ្រប់គ្រងអប់រំ'],
+            ['major_name' => 'Ecology', 'degree_level' => 'PhD', 'khmer_name' => 'អេកូឡូសី'],
         ];
 
         DB::table('majors')->insert($majors);
