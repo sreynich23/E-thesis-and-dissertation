@@ -62,7 +62,7 @@ class BookController extends Controller
             'id_majors' => 'required|integer',
             'generations' => 'required|string',
             'year' => 'required|integer',
-            'path_file' => 'nullable|file|mimes:pdf|max:10240',
+            'path_file' => 'nullable|file|mimes:pdf|max:102400',
         ]);
 
         $existingBook = Book::where('title', $request->title)->first();

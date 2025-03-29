@@ -146,7 +146,6 @@
                 </div>
             </div>
         @else
-            <p class="text-center text-gray-500">No images uploaded yet.</p>
         @endif
     </div>
     <!-- Books Display -->
