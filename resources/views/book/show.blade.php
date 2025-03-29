@@ -139,47 +139,11 @@
             </div>
 
             @if ($book->path_file && Storage::disk('public')->exists($book->path_file))
-            <embed src="{{ asset('storage/' . $book->path_file) }}" type="application/pdf"
+            <embed src="{{ asset('storage/' . $book->path_file) }}#toolbar=0&scrollbar=0&zoom=FitV&page=1" type="application/pdf"
                 class="h-96 lg:w-full lg:h-full border-none justify-self-center bg-white" />
             @else
                 <p class="text-red-500">The requested resource was not found on this server.</p>
             @endif
-        </div>
-        <div class="w-2/6">
-            <input type="text" x-model="search" placeholder="Search..."
-                class="px-4 py-2 border rounded-md text-black mb-4 w-full">
-
-            @foreach ($groupedBooks as $id_majors => $books)
-                @php
-                    $major = App\Models\Major::find($id_majors);
-                @endphp
-                <div x-show="Major === '{{ $major ? $major->major_name : 'Unknown Major' }}' || Major === 'Major'">
-                    <h1 class="text-base md:text-xl lg:text-3xl font-bold text-cyan-500 mb-6">
-                        {{ $major ? $major->major_name : 'Unknown Major' }}
-                    </h1>
-                    <div class="gap-2 grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                        @foreach ($books as $book)
-                            <a href="{{ route('books.show', $book->id) }}"
-                                class="bg-white shadow-lg w-10 lg:w-20 flex-shrink-0"
-                                x-show="(Generation === '{{ $book->generation }}' || Generation === 'Generation') &&
-                                        (Year === '{{ $book->year }}' || Year === 'Year')">
-                                        @if ($book->path_file && Storage::disk('public')->exists($book->path_file))
-                                        <div style="overflow: hidden;">
-                                            <embed
-                                                src="{{ asset('storage/' . $book->path_file) }}#toolbar=0&navpanes=0&scrollbar=0&zoom=FitH"
-                                                type="application/pdf"
-                                                class="h-60 border-none justify-self-center bg-white"
-                                                style="pointer-events: none;" />
-                                        </div>
-                                    @else
-                                        <p class="text-red-500">The requested resource was not found on this server.</p>
-                                    @endif
-                                <p class="text-center text-sm">{{ Str::limit($book->title, 10) }}</p>
-                            </a>
-                        @endforeach
-                    </div>
-                </div>
-            @endforeach
         </div>
     </div>
     </div>

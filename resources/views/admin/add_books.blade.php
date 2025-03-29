@@ -8,10 +8,12 @@
             <label for="major" class="block text-gray-700">Major</label>
             <select name="id_majors" id="major" class="w-full p-2 border border-gray-300 rounded mt-1">
                 @foreach ($majors as $major)
-                    <option value="{{ $major->id }}">{{ $major->major_name }}-{{$major->khmer_name}}</option>
+                    <option value="{{ $major->id }}">{{ $major->major_name }}-{{ $major->khmer_name }}</option>
                 @endforeach
             </select>
-            @error('id_majors') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+            @error('id_majors')
+                <p class="text-red-500 text-sm">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- Generation Input -->
@@ -19,7 +21,9 @@
             <label for="generation" class="block text-gray-700">Generation</label>
             <input type="text" name="generations" id="generation" placeholder="Enter Generation"
                 class="w-full p-2 border border-gray-300 rounded mt-1">
-            @error('generations') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+            @error('generations')
+                <p class="text-red-500 text-sm">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- Year Input -->
@@ -27,7 +31,9 @@
             <label for="year" class="block text-gray-700">Year</label>
             <input type="text" name="year" id="year" placeholder="Enter Year"
                 class="w-full p-2 border border-gray-300 rounded mt-1">
-            @error('year') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+            @error('year')
+                <p class="text-red-500 text-sm">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- Title -->
@@ -35,23 +41,25 @@
             <label for="title" class="block text-gray-700">Title</label>
             <input type="text" name="title" id="title" placeholder="Enter Book Title"
                 class="w-full p-2 border border-gray-300 rounded mt-1" required>
-            @error('title') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
-        </div>
-
-        <!-- Cover Image -->
-        <div class="mb-4">
-            <label for="cover" class="block text-gray-700">Cover</label>
-            <input type="file" name="cover" id="cover"
-                class="w-full p-2 border border-gray-300 rounded mt-1">
-            @error('cover') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+            @error('title')
+                <p class="text-red-500 text-sm">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- PDF File -->
         <div class="mb-4">
             <label for="path_file" class="block text-gray-700">File</label>
-            <input type="file" name="path_file" id="path_file"
-                class="w-full p-2 border border-gray-300 rounded mt-1">
-            @error('path_file') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+            <input type="file" name="path_file" id="path_file" accept="application/pdf"
+                class="w-full p-2 border border-gray-300 rounded mt-1" onchange="previewPDF(event)">
+            @error('path_file')
+                <p class="text-red-500 text-sm">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <!-- PDF Preview -->
+        <div id="pdf-preview" class="mb-4 border border-gray-300 rounded hidden">
+            <iframe id="pdf-frame" type="application/pdf"
+                class="w-full h-96 border-none justify-self-center bg-white"></iframe>
         </div>
 
         <div class="mb-4">
@@ -109,4 +117,23 @@
             input.value = selectedYear.textContent;
         }
     });
+
+    function previewPDF(event) {
+    const file = event.target.files[0];
+    if (file && file.type === "application/pdf") {
+        const pdfFrame = document.getElementById('pdf-frame');
+        const url = URL.createObjectURL(file);
+        pdfFrame.src = url+ "#toolbar=0&zoom=100&page=1";
+        document.getElementById('pdf-preview').classList.remove('hidden');
+
+        // Release memory when done
+        pdfFrame.onload = function() {
+            URL.revokeObjectURL(url);
+        };
+    } else {
+        alert("Please upload a valid PDF file.");
+        document.getElementById('pdf-preview').classList.add('hidden');
+    }
+}
+
 </script>

@@ -42,16 +42,19 @@
     </nav>
     <div class="space-y-4 w-full md:w-auto">
         <div class="flex items-center lg:space-x-4 space-x-2 justify-self-center">
+
             <!-- Generation Dropdown -->
-            <div class="relative" x-data="{ open: false }">
+            <div class="relative" x-data="{ open: false, Generation: '' }">
                 <button @click="open = !open"
                     class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-red-800 text-white lg:py-2 lg:px-10 lg:rounded-md p-1">
-                    <span x-text="Generation"></span>
+                    <span x-text="Generation || 'Select Generation'"></span>
                     <svg class="ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd"
                             d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                             clip-rule="evenodd" />
                     </svg>
+                    <!-- Clear Button -->
+                    <span x-show="Generation" @click.stop="Generation = ''" class="ml-2 text-gray-300 hover:text-gray-500">✕</span>
                 </button>
                 <div x-show="open" @click.away="open = false"
                     class="absolute right-0 lg:mt-2 lg:w-48 bg-white lg:rounded-md shadow-lg py-1 z-10 overflow-y-auto min-h-full max-h-min h-40">
@@ -67,18 +70,20 @@
             </div>
 
             <!-- Major Dropdown -->
-            <div class="relative" x-data="{ open: false }">
+            <div class="relative" x-data="{ open: false, Major: '' }">
                 <button @click="open = !open"
                     class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-red-800 text-white lg:py-2 lg:px-10 lg:rounded-md p-1">
-                    <span x-text="Major"></span>
+                    <span x-text="Major || 'Select Major'"></span>
                     <svg class="ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd"
                             d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                             clip-rule="evenodd" />
                     </svg>
+                    <!-- Clear Button -->
+                    <span x-show="Major" @click.stop="Major = ''" class="ml-2 text-gray-300 hover:text-gray-500">✕</span>
                 </button>
                 <div x-show="open" @click.away="open = false"
-                    class="absolute right-0 lg:mt-2 lg:w-72 bg-white lg:rounded-md shadow-lg py-1 z-10 overflow-y-auto min-h-full max-h-min h-40">
+                    class="absolute lg:right-0 lg:mt-2 lg:w-80 bg-white lg:rounded-md shadow-lg py-1 z-10 overflow-y-auto min-h-full max-h-min w-40 h-40 lg:h-80">
                     <div class="space-y-1">
                         @foreach ($majors as $major)
                             <a @click="Major = '{{ $major->major_name }}'; open = false"
@@ -91,15 +96,17 @@
             </div>
 
             <!-- Year Dropdown -->
-            <div class="relative" x-data="{ open: false }">
+            <div class="relative" x-data="{ open: false, Year: '' }">
                 <button @click="open = !open"
                     class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-red-800 text-white lg:py-2 lg:px-10 lg:rounded-md p-1">
-                    <span x-text="Year"></span>
+                    <span x-text="Year || 'Select Year'"></span>
                     <svg class="ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd"
                             d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                             clip-rule="evenodd" />
                     </svg>
+                    <!-- Clear Button -->
+                    <span x-show="Year" @click.stop="Year = ''" class="ml-2 text-gray-300 hover:text-gray-500">✕</span>
                 </button>
                 <div x-show="open" @click.away="open = false"
                     class="absolute right-0 lg:mt-2 lg:w-48 bg-white lg:rounded-md shadow-lg py-1 z-10 overflow-y-auto h-40">
@@ -113,9 +120,15 @@
                     </div>
                 </div>
             </div>
-            <!-- Search Input -->
-            <input type="text" x-model="search" placeholder="Search..."
-                class="px-4 py-2 border-red-800 border-2 lg:rounded-md text-black w-full md:w-auto lg:w-80">
+
+            <!-- Search Input with Clear Button -->
+            <div class="relative">
+                <input type="text" x-model="search" placeholder="Search..."
+                    class="px-4 py-2 border-red-800 border-2 lg:rounded-md text-black w-full md:w-auto lg:w-80 pr-10">
+                <button x-show="search" @click="search = ''"
+                    class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700">✕</button>
+            </div>
+
         </div>
     </div>
 
@@ -158,7 +171,7 @@
                             @if ($book->path_file && Storage::disk('public')->exists($book->path_file))
                                 <div style="overflow: hidden;">
                                     <embed
-                                        src="{{ asset('storage/' . $book->path_file) }}#navpanes=0&scrollbar=0&view=FitH&page=1"
+                                        src="{{ asset('storage/' . $book->path_file) }}#toolbar=0&navpanes=0&scrollbar=0&view=FitV&page=1"
                                         type="application/pdf"
                                         class="h-48 lg:h-60 border-none justify-self-center bg-white"
                                         style="pointer-events: none;" />
@@ -166,7 +179,6 @@
                             @else
                                 <p class="text-red-500">The requested resource was not found on this server.</p>
                             @endif
-
                             <h2 class="font-medium text-xs md:text-sm lg:text-base text-gray-800 p-1">{{ $book->title }}</h2>
                         </a>
                     @endforeach

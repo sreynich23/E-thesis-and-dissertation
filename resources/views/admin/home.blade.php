@@ -45,7 +45,7 @@
                         @if ($book->path_file && Storage::disk('public')->exists($book->path_file))
                                 <div style="overflow: hidden;">
                                     <embed
-                                        src="{{ asset('storage/' . $book->path_file) }}#toolbar=0&navpanes=0&scrollbar=0&zoom=FitH"
+                                        src="{{ asset('storage/' . $book->path_file) }}#toolbar=0&navpanes=0&scrollbar=0&view=FitV&page=1"
                                         type="application/pdf"
                                         class="h-60 border-none justify-self-center bg-white"
                                         style="pointer-events: none;" />
