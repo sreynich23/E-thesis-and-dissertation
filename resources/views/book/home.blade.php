@@ -12,6 +12,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Khmer+OS+Siemreap&display=swap" rel="stylesheet">
 </head>
 
 <body x-data="{ Major: 'Major', Generation: 'Generation', Year: 'Year', search: '', showProfile: false, @if (Auth::check()) studentName: '{{ Auth::user()->name }}',
@@ -52,20 +53,17 @@
         </div>
     </nav>
     <div class="space-y-4 w-full md:w-auto">
-        <div class="flex items-center lg:space-x-4 space-x-2 justify-self-center">
+        <div class="flex items-center space-x-2 justify-center">
             <!-- Generation Dropdown -->
             <div class="relative" x-data="{ open: false }">
-                <button @click="open = !open" class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-red-800 text-white lg:py-2 lg:px-10 lg:rounded-md p-1">
-                    <span x-text="Generation"></span>
-                    <svg class="ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                    </svg>
-                    <span x-show="Generation" @click.stop="Generation = 'Generation'" class="ml-2 text-gray-300 hover:text-gray-500">✕</span>
+                <button @click="open = !open" @click.away="open = false" class="flex items-center text-xs md:text-sm lg:text-base bg-red-800 text-white py-2 px-4 rounded-md">
+                    <span x-text="Generation || 'Generation'"></span>
+                    <span x-show="Generation" @click.stop="Generation = ''" class="ml-2 text-gray-300 hover:text-gray-500">✕</span>
                 </button>
-                <div x-show="open" @click.away="open = false" class="absolute right-0 lg:mt-2 lg:w-48 bg-white lg:rounded-md shadow-lg py-1 z-10 overflow-y-auto min-h-full max-h-min h-40">
+                <div x-cloak x-show="open" x-transition class="absolute mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 overflow-auto max-h-40">
                     <div class="space-y-1">
                         @foreach ($generations as $generation => $value)
-                            <a @click="Generation = '{{ $generation }}'; open = false" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 lg:rounded-md">
+                            <a @click="Generation = '{{ $generation }}'; open = false" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                 {{ $generation }}
                             </a>
                         @endforeach
@@ -75,18 +73,15 @@
 
             <!-- Major Dropdown -->
             <div class="relative" x-data="{ open: false }">
-                <button @click="open = !open" class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-red-800 text-white lg:py-2 lg:px-10 lg:rounded-md p-1">
-                    <span x-text="Major"></span>
-                    <svg class="ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                    </svg>
-                    <span x-show="Major" @click.stop="Major = 'Major'" class="ml-2 text-gray-300 hover:text-gray-500">✕</span>
+                <button @click="open = !open" @click.away="open = false" class="flex items-center text-xs md:text-sm lg:text-base bg-red-800 text-white py-2 px-4 rounded-md">
+                    <span x-text="Major || 'Major'"></span>
+                    <span x-show="Major" @click.stop="Major = ''" class="ml-2 text-gray-300 hover:text-gray-500">✕</span>
                 </button>
-                <div x-show="open" @click.away="open = false" class="absolute right-0 lg:mt-2 lg:w-72 bg-white lg:rounded-md shadow-lg py-1 z-10 overflow-y-auto min-h-full max-h-min h-40">
+                <div x-cloak x-show="open" x-transition class="absolute mt-2 w-72 bg-white rounded-md shadow-lg py-1 z-10 overflow-auto max-h-40">
                     <div class="space-y-1">
                         @foreach ($majors as $major)
-                            <a @click="Major = '{{ $major->major_name }}'; open = false" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 lg:rounded-md">
-                                {{ $major->major_name }}-{{ $major->khmer_name }}
+                            <a @click="Major = '{{ $major->major_name }}'; open = false" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                {{ $major->major_name }} - {{ $major->khmer_name }}
                             </a>
                         @endforeach
                     </div>
@@ -95,34 +90,31 @@
 
             <!-- Year Dropdown -->
             <div class="relative" x-data="{ open: false }">
-                <button @click="open = !open" class="nav-link flex items-center text-xs md:text-sm lg:text-base bg-red-800 text-white lg:py-2 lg:px-10 lg:rounded-md p-1">
-                    <span x-text="Year"></span>
-                    <svg class="ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                    </svg>
-                    <span x-show="Year" @click.stop="Year = 'Year'" class="ml-2 text-gray-300 hover:text-gray-500">✕</span>
+                <button @click="open = !open" @click.away="open = false" class="flex items-center text-xs md:text-sm lg:text-base bg-red-800 text-white py-2 px-4 rounded-md">
+                    <span x-text="Year || 'Year'"></span>
+                    <span x-show="Year" @click.stop="Year = ''" class="ml-2 text-gray-300 hover:text-gray-500">✕</span>
                 </button>
-                <div x-show="open" @click.away="open = false" class="absolute right-0 lg:mt-2 lg:w-48 bg-white lg:rounded-md shadow-lg py-1 z-10 overflow-y-auto h-40">
+                <div x-cloak x-show="open" x-transition class="absolute mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 overflow-auto max-h-40">
                     <div class="space-y-1">
                         @foreach ($years as $year => $value)
-                            <a @click="Year = '{{ $year }}'; open = false" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 lg:rounded-md">
+                            <a @click="Year = '{{ $year }}'; open = false" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                 {{ $year }}
                             </a>
                         @endforeach
                     </div>
                 </div>
             </div>
+
             <!-- Search Input -->
             <div class="relative">
                 <input type="text" x-model="search" placeholder="Search..."
-                       class="px-4 py-2 border-red-800 border-2 lg:rounded-md text-black w-full md:w-auto lg:w-80 pr-10">
+                       class="px-4 py-2 border-2 border-red-800 rounded-md text-black w-full md:w-64 lg:w-80 pr-10">
                 <!-- Clear button (X) -->
                 <button x-show="search" @click="search = ''"
                         class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700">
                     ✕
                 </button>
             </div>
-
         </div>
     </div>
 
@@ -172,7 +164,9 @@
                             @else
                                 <p class="text-red-500">The requested resource was not found on this server.</p>
                             @endif
-                            <h2 class="font-medium text-xs md:text-sm lg:text-base text-gray-800 p-1">{{ $book->title }}</h2>
+                            <p class="font-medium text-xs md:text-sm lg:text-sm text-gray-800 p-1 overflow-hidden text-ellipsis line-clamp-3" style="font-family: 'Khmer OS Siemreap', sans-serif;">
+                                {{ $book->title }}
+                            </p>
                         </a>
                     @endforeach
                 </div>

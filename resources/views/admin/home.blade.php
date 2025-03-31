@@ -54,7 +54,9 @@
                                 <p class="text-red-500">The requested resource was not found on this server.</p>
                             @endif
 
-                        <h2 class="font-semibold text-lg text-gray-800 p-1">{{ $book->title }}</h2>
+                            <p class="font-medium text-xs md:text-sm lg:text-sm text-gray-800 p-1 overflow-hidden text-ellipsis line-clamp-3" style="font-family: 'Khmer OS Siemreap', sans-serif;">
+                                {{ $book->title }}
+                            </p>
                     </div>
                 @endforeach
             </div>

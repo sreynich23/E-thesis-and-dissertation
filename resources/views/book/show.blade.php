@@ -12,6 +12,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Khmer+OS+Siemreap&display=swap" rel="stylesheet">
 </head>
 
 <body x-data="{ Major: 'Major', Generation: 'Generation', Year: 'Year', search: '', showProfile: false }">
@@ -25,8 +26,8 @@
 
     <div class="flex">
         <div class="container mx-auto p-6 h-screen w-4/6">
-            <div class="flex justify-between items-center mb-4 bg-white">
-                <h1 class="text-base md:text-xl lg:text-3xl font-bold text-cyan-500 mb-4">{{ $book->title }}</h1>
+            <div class="lg:flex justify-between items-center mb-4 bg-white">
+                <h1 class="text-base md:text-xl lg:text-2xl font-bold text-cyan-500 mb-4"style="font-family: 'Khmer OS Siemreap', sans-serif;">{{ $book->title }}</h1>
                 @if (Auth::check())
                     <a href="{{ route('books.download', $book->id) }}" class="pr-20">
                         <button class="bg-blue-500 text-white lg:px-4 lg:py-2 px-2 py-1 rounded-md text-xs md:text-sm lg:text-lg">
