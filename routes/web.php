@@ -22,7 +22,9 @@ Route::middleware(['auth:student', RoleMiddleware::class . ':student'])->group(f
 Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function () {
     Route::get('/books', [BookController::class, 'indexAdmin'])->name('books');
     Route::post('/books/create', [BookController::class, 'book_Create'])->name('books.create');
+    Route::post('/books/update/{id}', [BookController::class, 'updateBook'])->name('books.update');
     Route::post('/majors', [BookController::class, 'create_major'])->name('majors.create');
+    Route::post('/books/majors/update/{id}', [BookController::class, 'updateMajor'])->name('majors.edit');
     Route::get('/books/admin', [BookController::class, 'indexAdmin'])->name('books.admin');
     Route::get('/books/{id}', [BookController::class, 'showAdmin'])->name('books.show.admin');
     Route::get('/books/search', [BookController::class, 'searchBooks'])->name('books.search');

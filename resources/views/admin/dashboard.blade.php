@@ -54,6 +54,10 @@
                     onclick="highlightSidebarItem(this,'student')">
                     <i class="fas fa-user"></i><span class="opacity-0">Student</span>
                 </button>
+                <button class="px-3 flex items-center space-x-4 text-gray-950"
+                    onclick="highlightSidebarItem(this,'update_book')">
+                    <i class="fas fa-edit"></i><span class="opacity-0">Edit book</span>
+                </button>
             </div>
         </div>
         <!-- Main Content -->
@@ -69,6 +73,9 @@
             </div>
             <div id="student" class="page hidden">
                 @include('admin.student')
+            </div>
+            <div id="update_book" class="page hidden">
+                @include('admin.book')
             </div>
         </div>
     </div>

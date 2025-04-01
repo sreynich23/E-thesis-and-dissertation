@@ -38,7 +38,7 @@
             @php
                 $major = App\Models\Major::find($id_majors);
             @endphp
-            <h1 class="text-3xl font-bold text-cyan-500 mb-6">{{ $major ? $major->major_name : 'Unknown Major' }}</h1>
+            <h1 class="text-3xl font-bold text-cyan-500 mb-6" style="font-family: 'Khmer OS Siemreap', sans-serif;">{{ $major ? $major->major_name : 'Unknown Major' }}</h1>
             <div class="gap-2 overflow-x-auto flex space-x-1 pb-4">
                 @foreach ($books as $book)
                     <div class="bg-white shadow-lg w-28 lg:w-40 flex-shrink-0">

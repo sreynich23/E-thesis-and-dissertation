@@ -17,7 +17,7 @@
 
 <body x-data="{ Major: 'Major', Generation: 'Generation', Year: 'Year', search: '', showProfile: false }">
     <nav class="border-b text-black sticky">
-        <img src="{{ asset('storage/logo/navbar.jpg') }}" class="w-full">
+        <img src="{{ asset('storage/logo/navbar.png') }}" class="w-full">
     </nav>
     <button onclick="window.location.href='{{ url('/') }}'" class="text-blue-500 p-5">
         ⇽ Back Home
@@ -25,30 +25,36 @@
 
 
     <div class="flex">
-        <div class="container mx-auto p-6 h-screen w-4/6">
+        <div class="container mx-auto p-6 h-screen">
             <div class="lg:flex justify-between items-center mb-4 bg-white">
-                <h1 class="text-base md:text-xl lg:text-2xl font-bold text-cyan-500 mb-4"style="font-family: 'Khmer OS Siemreap', sans-serif;">{{ $book->title }}</h1>
+                <h1
+                    class="text-base md:text-xl lg:text-2xl font-bold text-cyan-500 mb-4"style="font-family: 'Khmer OS Siemreap', sans-serif;">
+                    {{ $book->title }}</h1>
                 @if (Auth::check())
                     <a href="{{ route('books.download', $book->id) }}" class="pr-20">
-                        <button class="bg-blue-500 text-white lg:px-4 lg:py-2 px-2 py-1 rounded-md text-xs md:text-sm lg:text-lg">
+                        <button
+                            class="bg-blue-500 text-white lg:px-4 lg:py-2 px-2 py-1 rounded-md text-xs md:text-sm lg:text-lg">
                             Download
                         </button>
                     </a>
                 @else
                     <a href="{{ route('login') }}" class="pr-20">
-                        <button class="bg-blue-500 text-white lg:px-4 lg:py-2 px-2 py-1 rounded-md text-xs md:text-sm lg:text-lg">
+                        <button
+                            class="bg-blue-500 text-white lg:px-4 lg:py-2 px-2 py-1 rounded-md text-xs md:text-sm lg:text-lg">
                             Download
                         </button>
                     </a>
                 @endif
             </div>
-
-            @if ($book->path_file && Storage::disk('public')->exists($book->path_file))
-            <embed src="{{ asset('storage/' . $book->path_file) }}#toolbar=0&scrollbar=0&view=FitV&page=1" type="application/pdf"
-                class="h-96 lg:w-full lg:h-full border-none justify-self-center bg-white" />
-            @else
-                <p class="text-red-500">The requested resource was not found on this server.</p>
-            @endif
+            <div class="h-screen w-4/6 justify-self-center">
+                @if ($book->path_file && Storage::disk('public')->exists($book->path_file))
+                    <embed src="{{ asset('storage/' . $book->path_file) }}#toolbar=0&scrollbar=0&view=FitV&page=1"
+                        type="application/pdf"
+                        class="h-96 lg:w-full lg:h-full border-none justify-self-center bg-white" />
+                @else
+                    <p class="text-red-500">The requested resource was not found on this server.</p>
+                @endif
+            </div>
         </div>
     </div>
     </div>

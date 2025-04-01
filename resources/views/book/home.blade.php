@@ -21,8 +21,8 @@
         studentName: 'Guest',studentId: 'N/A' @endif }" class="w-screen h-full">
 
     <nav class="border-b text-black sticky z-10">
-        <div class="flex justify-between items-start h-24 md:h-44 lg:h-80"
-            style="background-image: url('{{ asset('storage/logo/navbar.png') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+        <div class="flex justify-between items-start">
+            <img src="{{ asset('storage/logo/navbar.png') }}" class="w-full">
             <div class="space-x-4 flex items-center absolute top-1 lg:top-4 right-4 lg:right-12 transform">
                 @if (Auth::check())
                     @if (Auth::guard('student')->check())
@@ -56,9 +56,9 @@
         <div class="flex items-center space-x-2 justify-center">
             <!-- Generation Dropdown -->
             <div class="relative" x-data="{ open: false }">
-                <button @click="open = !open" @click.away="open = false" class="flex items-center text-xs md:text-sm lg:text-base bg-red-800 text-white py-2 px-4 rounded-md">
+                <button @click="open = !open" @click.away="open = false" class="flex items-center text-xs md:text-sm lg:text-base bg-red-800 text-white p-1 lg:py-2 lg:px-4 lg:rounded-md rounded-sm">
                     <span x-text="Generation || 'Generation'"></span>
-                    <span x-show="Generation" @click.stop="Generation = ''" class="ml-2 text-gray-300 hover:text-gray-500">✕</span>
+                    <span x-show="Generation" @click.stop="Generation = 'Generation'" class="ml-2 text-gray-300 hover:text-gray-500">✕</span>
                 </button>
                 <div x-cloak x-show="open" x-transition class="absolute mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 overflow-auto max-h-40">
                     <div class="space-y-1">
@@ -73,9 +73,9 @@
 
             <!-- Major Dropdown -->
             <div class="relative" x-data="{ open: false }">
-                <button @click="open = !open" @click.away="open = false" class="flex items-center text-xs md:text-sm lg:text-base bg-red-800 text-white py-2 px-4 rounded-md">
+                <button @click="open = !open" @click.away="open = false" class="flex items-center text-xs md:text-sm lg:text-base bg-red-800 text-white p-1 lg:py-2 lg:px-4 lg:rounded-md rounded-sm">
                     <span x-text="Major || 'Major'"></span>
-                    <span x-show="Major" @click.stop="Major = ''" class="ml-2 text-gray-300 hover:text-gray-500">✕</span>
+                    <span x-show="Major" @click.stop="Major = 'Major'" class="ml-2 text-gray-300 hover:text-gray-500">✕</span>
                 </button>
                 <div x-cloak x-show="open" x-transition class="absolute mt-2 w-72 bg-white rounded-md shadow-lg py-1 z-10 overflow-auto max-h-40">
                     <div class="space-y-1">
@@ -90,9 +90,9 @@
 
             <!-- Year Dropdown -->
             <div class="relative" x-data="{ open: false }">
-                <button @click="open = !open" @click.away="open = false" class="flex items-center text-xs md:text-sm lg:text-base bg-red-800 text-white py-2 px-4 rounded-md">
+                <button @click="open = !open" @click.away="open = false" class="flex items-center text-xs md:text-sm lg:text-base bg-red-800 text-white p-1 lg:py-2 lg:px-4 lg:rounded-md rounded-sm">
                     <span x-text="Year || 'Year'"></span>
-                    <span x-show="Year" @click.stop="Year = ''" class="ml-2 text-gray-300 hover:text-gray-500">✕</span>
+                    <span x-show="Year" @click.stop="Year = 'Year'" class="ml-2 text-gray-300 hover:text-gray-500">✕</span>
                 </button>
                 <div x-cloak x-show="open" x-transition class="absolute mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 overflow-auto max-h-40">
                     <div class="space-y-1">
@@ -108,10 +108,10 @@
             <!-- Search Input -->
             <div class="relative">
                 <input type="text" x-model="search" placeholder="Search..."
-                       class="px-4 py-2 border-2 border-red-800 rounded-md text-black w-full md:w-64 lg:w-80 pr-10">
+                       class="p-1 lg:py-2 lg:px-4 lg:rounded-md rounded-sm text-xs md:text-sm lg:text-base border-2 border-red-800 text-black w-full md:w-64 lg:w-80 pr-10">
                 <!-- Clear button (X) -->
                 <button x-show="search" @click="search = ''"
-                        class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700">
+                        class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 text-xs md:text-sm lg:text-base">
                     ✕
                 </button>
             </div>
@@ -143,7 +143,7 @@
 
             <!-- Show only books matching the selected Major -->
             <div x-show="Major === '{{ $major ? $major->major_name : 'Unknown Major' }}' || Major === 'Major'">
-                <h1 class="text-3xl font-bold text-cyan-500 mb-6">{{ $major ? $major->major_name : 'Unknown Major' }}
+                <h1 class="text-base md:text-xl lg:text-2xl font-bold text-cyan-500 mb-6" style="font-family: 'Khmer OS Siemreap', sans-serif;">{{ $major ? $major->major_name : 'Unknown Major' }}-{{ $major ? $major->khmer_name : 'Unknown Major' }}
                 </h1>
                 <div class="gap-2 overflow-x-auto flex space-x-1 pb-4 grid-cols-5">
                     @foreach ($books as $book)
@@ -155,11 +155,12 @@
                                 (search === '' || '{{ strtolower($book->title) }}'.includes(search.toLowerCase()))">
                             @if ($book->path_file && Storage::disk('public')->exists($book->path_file))
                                 <div style="overflow: hidden;">
-                                    <embed
-                                        src="{{ asset('storage/' . $book->path_file) }}#toolbar=0&navpanes=0&scrollbar=0&view=FitV&page=1"
+                                    <object
+                                        data="{{ asset('storage/' . $book->path_file) }}#toolbar=0&navpanes=0&scrollbar=0&view=FitV&page=1"
                                         type="application/pdf"
                                         class="h-48 lg:h-60 border-none justify-self-center bg-white"
-                                        style="pointer-events: none;" />
+                                        style="pointer-events: none;">
+                                    </object>
                                 </div>
                             @else
                                 <p class="text-red-500">The requested resource was not found on this server.</p>

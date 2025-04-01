@@ -135,4 +135,51 @@ class BookController extends Controller
         return response()->download($filePath, $book->title . '.pdf');
     }
 
+    public function updateBook($id, Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'id_majors' => 'required|integer',
+            'generations' => 'required|string',
+            'year' => 'required|integer',
+            'path_file' => 'nullable|file|mimes:pdf|max:102400',
+        ]);
+
+        $book = Book::findOrFail($id);
+
+        if ($request->hasFile('path_file')) {
+            // Delete the old file if it exists
+            if ($book->path_file) {
+                Storage::disk('public')->delete($book->path_file);
+            }
+
+            // Store the new file
+            $book->path_file = $request->file('path_file')->store('pdf_books', 'public');
+        }
+
+        $book->title = $request->title;
+        $book->id_majors = $request->id_majors;
+        $book->generation = $request->generations;
+        $book->year = $request->year;
+        $book->save();
+
+        return redirect()->back()->with('success', 'Book updated successfully!');
+    }
+
+    public function updateMajor($id, Request $request)
+    {
+        $request->validate([
+            'major_name' => 'required|string|max:255',
+            'khmer_name' => 'required|string|max:255',
+            'degree_level' => 'required|string|max:255',
+        ]);
+
+        $major = Major::findOrFail($id);
+        $major->major_name = $request->major_name;
+        $major->khmer_name = $request->khmer_name;
+        $major->degree_level = $request->degree_level;
+        $major->save();
+
+        return redirect()->back()->with('success', 'Major updated successfully!');
+    }
 }
