@@ -48,13 +48,14 @@
             </div>
             <div class="h-screen w-4/6 justify-self-center">
                 @if ($book->path_file && Storage::disk('public')->exists($book->path_file))
-                    <embed src="{{ asset('storage/' . $book->path_file) }}#toolbar=0&scrollbar=0&view=FitV&page=1"
+                    <embed src="{{ asset('storage/' . $book->path_file) }}#toolbar=0&navpanes=0&scrollbar=0&view=FitV&page=1"
                         type="application/pdf"
                         class="h-96 lg:w-full lg:h-full border-none justify-self-center bg-white" />
                 @else
                     <p class="text-red-500">The requested resource was not found on this server.</p>
                 @endif
             </div>
+
         </div>
     </div>
     </div>

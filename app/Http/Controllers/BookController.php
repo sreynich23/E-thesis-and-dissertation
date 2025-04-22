@@ -24,7 +24,8 @@ class BookController extends Controller
         $groupedBooks = Book::all()->groupBy('id_majors');
         $students = Student::all();
         $covers = Cover::all();
-        return view('book.home', compact('books', 'groupedMajors', 'students', 'majors', 'groupedBooks', 'generations', 'years', 'covers'));
+        $bookCount = $books->count();
+        return view('book.home', compact('books', 'groupedMajors', 'students', 'majors', 'groupedBooks', 'generations', 'years', 'covers','bookCount'));
     }
     public function show($id)
     {
