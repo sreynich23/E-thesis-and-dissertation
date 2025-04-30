@@ -70,7 +70,7 @@
 
                     <label for="generations" class="block text-gray-700 mt-2">Generation</label>
                     <input type="text" name="generations" id="book_generation" placeholder="Enter Generation"
-                        class="w-full p-2 border border-gray-300 rounded mt-1" required>
+                        class="w-full p-2 border border-gray-300 rounded mt-1" required disabled>
 
                     <label for="year" class="block text-gray-700 mt-2">Year</label>
                     <input type="number" name="year" id="book_year" placeholder="Enter Year"

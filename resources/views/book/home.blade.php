@@ -15,11 +15,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Khmer+OS+Siemreap&display=swap" rel="stylesheet">
 </head>
 
-<body x-data="{ Major: 'Major', Generation: 'Generation', Year: 'Year', search: '', showProfile: false, @if (Auth::check()) studentName: '{{ Auth::user()->name }}',
+<body x-data="{ Degree_level: 'Degree level', Major: 'Major', Generation: 'Generation', Year: 'Year', search: '', showProfile: false, @if (Auth::check()) studentName: '{{ Auth::user()->name }}',
         studentId: '{{ Auth::user()->id_number }}'
     @else
         studentName: 'Guest',studentId: 'N/A' @endif }" class="w-screen h-full">
-
     <nav class="border-b text-black sticky z-10">
         <div class="flex justify-between items-start">
             <img src="{{ asset('storage/logo/navbar.png') }}" class="w-full">
@@ -58,17 +57,17 @@
             <div class="relative" x-data="{ open: false }">
                 <button @click="open = !open" @click.away="open = false"
                     class="flex items-center text-xs md:text-sm lg:text-base bg-red-800 text-white p-1 lg:py-2 lg:px-4 lg:rounded-md rounded-sm">
-                    <span x-text="Major || 'Major'"></span>
-                    <span x-show="Major" @click.stop="Major = 'Major'"
+                    <span x-text="Degree_level || 'Degree_level'"></span>
+                    <span x-show="Degree_level" @click.stop="Degree_level = 'Degree level'"
                         class="ml-2 text-gray-300 hover:text-gray-500">✕</span>
                 </button>
                 <div x-cloak x-show="open" x-transition
                     class="absolute mt-2 w-72 bg-white rounded-md shadow-lg py-1 z-10 overflow-auto max-h-40">
                     <div class="space-y-1">
-                        @foreach ($groupedMajors as $groupedMajor)
-                            <a @click="Major = '{{ $groupedMajor }}'; open = false"
+                        @foreach ($groupedMajors as $degreeLevel => $majors)
+                            <a @click="Degree_level = '{{ $degreeLevel }}'; open = false"
                                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                {{ $groupedMajor }}
+                                {{ $degreeLevel }}
                             </a>
                         @endforeach
                     </div>
@@ -193,41 +192,57 @@
                 </a>
             @endforeach
         </div>
-        @foreach ($groupedBooks as $id_majors => $books)
-            @php
-                $major = App\Models\Major::find($id_majors);
-            @endphp
-
-            <!-- Show only books matching the selected Major -->
-            <div x-show="Major === '{{ $major ? $major->major_name : 'Unknown Major' }}' || Major === 'Major'">
-                <h1 class="text-base md:text-xl lg:text-2xl font-bold text-cyan-500 mb-6"
+        @foreach ($groupedMajors as $degreeLevel => $majors)
+            <div x-show="Degree_level === '{{ $degreeLevel }}' || Degree_level === 'Degree level'">
+                <h2 class="text-lg font-bold text-blue-700 mt-6"
                     style="font-family: 'Khmer OS Siemreap', sans-serif;">
-                    {{ $major ? $major->major_name : 'Unknown Major' }}-{{ $major ? $major->khmer_name : 'Unknown Major' }}
-                </h1>
-                <div class="gap-2 overflow-x-auto flex space-x-1 pb-4 grid-cols-5">
-                    @foreach ($books as $book)
-                        <a href="{{ route('books.show', $book->id) }}"
-                            class="bg-white shadow-lg w-28 lg:w-40 flex-shrink-0"
-                            x-show="(Generation === '{{ $book->generation }}' || Generation === 'Generation') &&
-                                (Year === '{{ $book->year }}' || Year === 'Year'))">
-                            @if ($book->path_file && Storage::disk('public')->exists($book->path_file))
-                                <div style="overflow: hidden;">
-                                    <object
-                                        data="{{ asset('storage/' . $book->path_file) }}#toolbar=0&navpanes=0&scrollbar=0&view=FitV&page=1"
-                                        class="h-48 lg:h-60 border-none justify-self-center bg-white"
-                                        style="pointer-events: none;">
-                                    </object>
-                                </div>
-                            @else
-                                <p class="text-red-500">The requested resource was not found on this server.</p>
-                            @endif
-                            <p class="font-medium text-xs md:text-sm lg:text-sm text-gray-800 p-1 overflow-hidden text-ellipsis line-clamp-3"
-                                style="font-family: 'Khmer OS Siemreap', sans-serif;">
-                                {{ $book->title }}
-                            </p>
-                        </a>
-                    @endforeach
-                </div>
+                    {{ $degreeLevel }}
+                </h2>
+
+                @foreach ($majors as $major)
+                    @php
+                        $booksForMajor = $books->where('id_majors', $major->id);
+                    @endphp
+
+                    @if ($booksForMajor->count())
+                        <div x-show="Major === '{{ $major->major_name }}' || Major === 'Major'">
+                            <div class="flex items-center justify-between">
+                                <h1 class="text-base md:text-xl lg:text-2xl font-bold text-cyan-500 mb-6"
+                                    style="font-family: 'Khmer OS Siemreap', sans-serif;">
+                                    {{ $major->major_name }} - {{ $major->khmer_name }}
+                                </h1>
+                                <a href="{{ route('books.showMajor', $major->id) }}" class="text-red-800">see
+                                    more</a>
+                            </div>
+                            <div class="gap-2 overflow-x-auto flex space-x-1 pb-4 grid-cols-5">
+                                @foreach ($booksForMajor as $book)
+                                    <a href="{{ route('books.show', $book->id) }}"
+                                        class="bg-white shadow-lg w-28 lg:w-40 flex-shrink-0"
+                                        x-show="(Generation === '{{ $book->generation }}' || Generation === 'Generation') &&
+                                         (Year === '{{ $book->year }}' || Year === 'Year')
+">
+                                        @if ($book->path_file && Storage::disk('public')->exists($book->path_file))
+                                            <div style="overflow: hidden;">
+                                                <object
+                                                    data="{{ asset('storage/' . $book->path_file) }}#toolbar=0&navpanes=0&scrollbar=0&view=FitV&page=1"
+                                                    class="h-48 lg:h-60 border-none justify-self-center bg-white"
+                                                    style="pointer-events: none;">
+                                                </object>
+                                            </div>
+                                        @else
+                                            <p class="text-red-500">The requested resource was not found on this
+                                                server.</p>
+                                        @endif
+                                        <p class="font-medium text-xs md:text-sm lg:text-sm text-gray-800 p-1 overflow-hidden text-ellipsis line-clamp-3"
+                                            style="font-family: 'Khmer OS Siemreap', sans-serif;">
+                                            {{ $book->title }}
+                                        </p>
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
             </div>
         @endforeach
     </div>

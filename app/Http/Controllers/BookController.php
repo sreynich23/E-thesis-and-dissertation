@@ -34,9 +34,15 @@ class BookController extends Controller
         $books = Book::all();
         $majors = Major::all();
         $groupedMajors = Major::all()->groupBy('degree_level');
-        $groupedBooks = Book::all()->groupBy('id_majors');
+        $groupedBooks = Book::all()->join('id_majors');
         $book = Book::findOrFail($id);
         return view('book.show', compact('book', 'groupedMajors', 'majors', 'groupedBooks', 'generations', 'years'));
+    }
+    public function showMajor($id)
+    {
+        $major = Major::findOrFail($id);
+        $books = Book::where('id_majors', $id)->get();
+        return view('book.showAllMajor', compact('major', 'books'));
     }
     public function indexAdmin()
     {
@@ -61,7 +67,7 @@ class BookController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'id_majors' => 'required|integer',
-            'generations' => 'required|string',
+            'generations' => 'nullable|string',
             'year' => 'required|integer',
             'path_file' => 'nullable|file|mimes:pdf|max:102400',
         ]);
@@ -141,7 +147,7 @@ class BookController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'id_majors' => 'required|integer',
-            'generations' => 'required|string',
+            'generations' => 'nullable|string',
             'year' => 'required|integer',
             'path_file' => 'nullable|file|mimes:pdf|max:102400',
         ]);
