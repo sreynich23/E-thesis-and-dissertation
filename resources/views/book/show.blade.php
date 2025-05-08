@@ -30,7 +30,7 @@
                 <h1
                     class="text-base md:text-xl lg:text-2xl font-bold text-cyan-500 mb-4"style="font-family: 'Khmer OS Siemreap', sans-serif;">
                     {{ $book->title }}</h1>
-                @if (Auth::check())
+                {{-- @if (Auth::check())
                     <a href="{{ route('books.download', $book->id) }}" class="pr-20">
                         <button
                             class="bg-blue-500 text-white lg:px-4 lg:py-2 px-2 py-1 rounded-md text-xs md:text-sm lg:text-lg">
@@ -44,7 +44,13 @@
                             Download
                         </button>
                     </a>
-                @endif
+                @endif --}}
+                <a href="{{ route('books.download', $book->id) }}" class="pr-20">
+                    <button
+                        class="bg-blue-500 text-white lg:px-4 lg:py-2 px-2 py-1 rounded-md text-xs md:text-sm lg:text-lg">
+                        Download
+                    </button>
+                </a>
             </div>
             <div class="h-screen w-4/6 justify-self-center">
                 @if ($book->path_file && Storage::disk('public')->exists($book->path_file))

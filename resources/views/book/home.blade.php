@@ -102,6 +102,9 @@
                     <span x-show="Major" @click.stop="Major = 'Major'"
                         class="ml-2 text-gray-300 hover:text-gray-500">✕</span>
                 </button>
+                @php
+                    $majors = App\Models\Major::all();
+                @endphp
                 <div x-cloak x-show="open" x-transition
                     class="absolute mt-2 w-72 bg-white rounded-md shadow-lg py-1 z-10 overflow-auto max-h-40">
                     <div class="space-y-1">

@@ -14,10 +14,11 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/', [BookController::class, 'index'])->name('book');
 Route::get('/book/{id}', [BookController::class, 'show'])->name('books.show');
 Route::get('/major/{id}', [BookController::class, 'showMajor'])->name('books.showMajor');
+Route::get('/book/download/{id}', [BookController::class, 'download'])->name('books.download');
 
-Route::middleware(['auth:student', RoleMiddleware::class . ':student'])->group(function () {
-    Route::get('/book/download/{id}', [BookController::class, 'download'])->name('books.download');
-});
+// Route::middleware(['auth:student', RoleMiddleware::class . ':student'])->group(function () {
+//     Route::get('/book/download/{id}', [BookController::class, 'download'])->name('books.download');
+// });
 
 // Admin Routes (Only for admins)
 Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function () {
