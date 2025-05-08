@@ -22,38 +22,36 @@
     <button onclick="window.location.href='{{ url('/') }}'" class="text-blue-500 p-5">
         ⇽ Back Home
     </button>
-    <div class="flex w-full lg:w-full p-6">
-        <div class="gap-2 overflow-x-auto flex space-x-1 pb-4 grid-cols-5">
-            @if($major->books->isEmpty())
+    <div class="w-full p-6">
+        @if ($major->books->isEmpty())
             <p>No books found for this major.</p>
         @else
-            <div class="row">
-                <div class="gap-2 flex space-x-1 pb-4 grid-cols-5">
-                @foreach($major->books as $book)
-                <a href="{{ route('books.show', $book->id) }}"
-                    class="bg-white shadow-lg w-28 lg:w-40 flex-shrink-0">
-                    @if ($book->path_file && Storage::disk('public')->exists($book->path_file))
-                        <div style="overflow: hidden;">
-                            <object
-                                data="{{ asset('storage/' . $book->path_file) }}#toolbar=0&navpanes=0&scrollbar=0&view=FitV&page=1"
-                                class="h-48 lg:h-60 border-none justify-self-center bg-white"
-                                style="pointer-events: none;">
-                            </object>
-                        </div>
-                    @else
-                        <p class="text-red-500">The requested resource was not found on this server.</p>
-                    @endif
-                    <p class="font-medium text-xs md:text-sm lg:text-sm text-gray-800 p-1 overflow-hidden text-ellipsis line-clamp-3"
-                        style="font-family: 'Khmer OS Siemreap', sans-serif;">
-                        {{ $book->title }}
-                    </p>
-                </a>
+            <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
+                @foreach ($major->books as $book)
+                    <a href="{{ route('books.show', $book->id) }}"
+                        class="bg-white shadow-lg rounded-md overflow-hidden hover:shadow-xl transition-shadow duration-200">
+                        @if ($book->path_file && Storage::disk('public')->exists($book->path_file))
+                            <div class="h-48 lg:h-60 overflow-hidden">
+                                <object
+                                    data="{{ asset('storage/' . $book->path_file) }}#toolbar=0&navpanes=0&scrollbar=0&view=FitV&page=1"
+                                    type="application/pdf" class="w-full h-full pointer-events-none">
+                                    <p class="text-xs text-gray-500">PDF preview not available.</p>
+                                </object>
+                            </div>
+                        @else
+                            <div
+                                class="h-48 lg:h-60 flex items-center justify-center bg-gray-100 text-red-500 text-sm p-2 text-center">
+                                The requested resource was not found.
+                            </div>
+                        @endif
+                        <p class="font-medium text-xs md:text-sm lg:text-sm text-gray-800 p-2 truncate"
+                            style="font-family: 'Khmer OS Siemreap', sans-serif;">
+                            {{ $book->title }}
+                        </p>
+                    </a>
                 @endforeach
-                </div>
             </div>
         @endif
-        </div>
-    </div>
     </div>
 </body>
 
