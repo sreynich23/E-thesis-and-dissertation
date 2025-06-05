@@ -142,7 +142,7 @@
             <!-- Search Input -->
             <div class="relative">
                 <input type="text" x-model="search" placeholder="Search..."
-                    class="p-1 lg:py-2 lg:px-4 lg:rounded-md rounded-sm text-xs md:text-sm lg:text-base border-2 border-red-800 text-black w-full md:w-64 lg:w-80 pr-10">
+                    class="p-1 lg:py-2 lg:px-4 lg:rounded-md rounded-sm text-xs md:text-sm lg:text-base border-2 border-red-800 text-black w-full md:w-96 lg:w-96 pr-10">
                 <!-- Clear button (X) -->
                 <button x-show="search" @click="search = ''"
                     class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 text-xs md:text-sm lg:text-base">
@@ -170,8 +170,13 @@
     </div>
     <!-- Books Display -->
     <div class="w-full lg:w-full p-6">
-        <div class="text-lg font-semibold text-red-800 my-4">
+        <div class="text-xs md:text-sm lg:text-lg font-semibold text-red-800 my-4 flex rounded-sm border-2 border-red-800 p-2 w-fit">
             Total Books: {{ $bookCount }}
+            @foreach ($bookCountsByDegree as $item)
+                <div>
+                    , {{ $item->degree_level }}: {{ $item->total_books }}
+                </div>
+            @endforeach
         </div>
         <div class="gap-2 overflow-x-auto flex space-x-1 pb-4 grid-cols-5" x-show="search.trim() !== ''">
             @foreach ($books as $book)
@@ -220,26 +225,17 @@
                             <div class="gap-2 overflow-x-auto flex space-x-1 pb-4 grid-cols-5">
                                 @foreach ($booksForMajor as $book)
                                     <a href="{{ route('books.show', $book->id) }}"
-                                        class="bg-white shadow-lg w-28 lg:w-40 flex-shrink-0"
+                                        class="bg-white shadow-lg w-28 lg:w-40"
                                         x-show="(Generation === '{{ $book->generation }}' || Generation === 'Generation') &&
                                          (Year === '{{ $book->year }}' || Year === 'Year')
 ">
-                                        @if ($book->path_file && Storage::disk('public')->exists($book->path_file))
-                                            <div style="overflow: hidden;">
-                                                <object
-                                                    data="{{ asset('storage/' . $book->path_file) }}#toolbar=0&navpanes=0&scrollbar=0&view=FitV&page=1"
-                                                    class="h-48 lg:h-60 border-none justify-self-center bg-white"
-                                                    style="pointer-events: none;">
-                                                </object>
-                                            </div>
-                                        @else
-                                            <p class="text-red-500">The requested resource was not found on this
-                                                server.</p>
-                                        @endif
-                                        <p class="font-medium text-xs md:text-sm lg:text-sm text-gray-800 p-1 overflow-hidden text-ellipsis line-clamp-3"
-                                            style="font-family: 'Khmer OS Siemreap', sans-serif;">
+                                        <img src="{{ asset('storage/' . $book->cover) }}"
+                                            alt="Cover of {{ $book->title }}" class="w-full object-cover mb-4">
+                                        <p class="font-medium text-xs md:text-sm lg:text-sm text-gray-800 p-1 overflow-hidden"
+                                            style="font-family: 'Khmer OS Siemreap', sans-serif; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-height: 1.4em; max-height: 4.2em;">
                                             {{ $book->title }}
                                         </p>
+
                                     </a>
                                 @endforeach
                             </div>

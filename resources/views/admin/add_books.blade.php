@@ -46,6 +46,14 @@
             @enderror
         </div>
 
+         <!-- Cover Image -->
+        <div class="mb-4">
+            <label for="cover" class="block text-gray-700">Cover</label>
+            <input type="file" name="cover" id="cover"
+                class="w-full p-2 border border-gray-300 rounded mt-1">
+            @error('cover') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+        </div>
+
         <!-- PDF File -->
         <div class="mb-4">
             <label for="path_file" class="block text-gray-700">File</label>

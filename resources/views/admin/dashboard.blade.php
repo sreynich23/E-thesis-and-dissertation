@@ -44,19 +44,19 @@
                 </button>
                 <button class="px-3 flex items-center space-x-4 text-gray-950"
                     onclick="highlightSidebarItem(this,'add_books')">
-                    <i class="fas fa-book"></i><span class="opacity-0">Add Book</span>
+                    <i class="fas fa-plus"></i><span class="opacity-0">Add Book</span>
+                </button>
+                <button class="px-3 flex items-center space-x-4 text-gray-950"
+                    onclick="highlightSidebarItem(this,'update_book')">
+                    <i class="fas fa-book"></i><span class="opacity-0">Edit book</span>
                 </button>
                 <button class="px-3 flex items-center space-x-4 text-gray-950"
                     onclick="highlightSidebarItem(this,'add_major')">
-                    <i class="fas fa-plus"></i><span class="opacity-0">Add Major</span>
+                    <i class="fas fa-edit"></i><span class="opacity-0">Add Major</span>
                 </button>
                 <button class="px-3 flex items-center space-x-4 text-gray-950"
                     onclick="highlightSidebarItem(this,'student')">
                     <i class="fas fa-user"></i><span class="opacity-0">Student</span>
-                </button>
-                <button class="px-3 flex items-center space-x-4 text-gray-950"
-                    onclick="highlightSidebarItem(this,'update_book')">
-                    <i class="fas fa-edit"></i><span class="opacity-0">Edit book</span>
                 </button>
             </div>
         </div>

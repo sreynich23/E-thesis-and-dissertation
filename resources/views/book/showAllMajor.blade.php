@@ -28,23 +28,13 @@
         @else
             <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
                 @foreach ($major->books as $book)
-                    <a href="{{ route('books.show', $book->id) }}"
-                        class="bg-white shadow-lg rounded-md overflow-hidden hover:shadow-xl transition-shadow duration-200">
-                        @if ($book->path_file && Storage::disk('public')->exists($book->path_file))
-                            <div class="h-48 lg:h-60 overflow-hidden">
-                                <object
-                                    data="{{ asset('storage/' . $book->path_file) }}#toolbar=0&navpanes=0&scrollbar=0&view=FitV&page=1"
-                                    type="application/pdf" class="w-full h-full pointer-events-none">
-                                    <p class="text-xs text-gray-500">PDF preview not available.</p>
-                                </object>
-                            </div>
-                        @else
-                            <div
-                                class="h-48 lg:h-60 flex items-center justify-center bg-gray-100 text-red-500 text-sm p-2 text-center">
-                                The requested resource was not found.
-                            </div>
-                        @endif
-                        <p class="font-medium text-xs md:text-sm lg:text-sm text-gray-800 p-2 truncate"
+                    <a href="{{ route('books.show', $book->id) }}" class="bg-white shadow-lg w-28 lg:w-40 flex-shrink-0"
+                        x-show="(Generation === '{{ $book->generation }}' || Generation === 'Generation') &&
+                                        (Year === '{{ $book->year }}' || Year === 'Year')
+">
+                        <img src="{{ asset('storage/' . $book->cover) }}" alt="Cover of {{ $book->title }}"
+                            class="w-full object-cover mb-4">
+                        <p class="font-medium text-xs md:text-sm lg:text-sm text-gray-800 p-1 overflow-hidden text-ellipsis line-clamp-3"
                             style="font-family: 'Khmer OS Siemreap', sans-serif;">
                             {{ $book->title }}
                         </p>

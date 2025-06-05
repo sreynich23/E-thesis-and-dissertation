@@ -8,6 +8,7 @@ use App\Models\Generation;
 use App\Models\Major;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use setasign\Fpdi\Tcpdf\Fpdi;
@@ -25,7 +26,13 @@ class BookController extends Controller
         $students = Student::all();
         $covers = Cover::all();
         $bookCount = $books->count();
-        return view('book.home', compact('books', 'groupedMajors', 'students', 'majors', 'groupedBooks', 'generations', 'years', 'covers','bookCount'));
+        $bookCountsByDegree = DB::table('books')
+            ->join('majors', 'books.id_majors', '=', 'majors.id')
+            ->select('majors.degree_level', DB::raw('count(books.id) as total_books'))
+            ->groupBy('majors.degree_level')
+            ->get();
+
+        return view('book.home', compact('books', 'groupedMajors', 'students', 'majors', 'groupedBooks', 'generations', 'years', 'covers', 'bookCount', 'bookCountsByDegree'));
     }
     public function show($id)
     {
@@ -69,6 +76,7 @@ class BookController extends Controller
             'id_majors' => 'required|integer',
             'generations' => 'nullable|string',
             'year' => 'required|integer',
+            'cover' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
             'path_file' => 'nullable|file|mimes:pdf|max:102400',
         ]);
 
@@ -83,6 +91,7 @@ class BookController extends Controller
             'id_majors' => $request->id_majors,
             'generation' => $request->generations,
             'year' => $request->year,
+            'cover' => $request->hasFile('cover') ? $request->file('cover')->store('covers', 'public') : null,
             'path_file' => $request->hasFile('path_file') ? $request->file('path_file')->store('pdf_books', 'public') : null,
         ]);
 
@@ -149,6 +158,7 @@ class BookController extends Controller
             'id_majors' => 'required|integer',
             'generations' => 'nullable|string',
             'year' => 'required|integer',
+            'cover' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
             'path_file' => 'nullable|file|mimes:pdf|max:102400',
         ]);
 
@@ -162,6 +172,10 @@ class BookController extends Controller
 
             // Store the new file
             $book->path_file = $request->file('path_file')->store('pdf_books', 'public');
+        }
+        if ($request->hasFile('cover')) {
+            $coverPath = $request->file('cover')->store('cover_images', 'public');
+            $book->cover = $coverPath;
         }
 
         $book->title = $request->title;

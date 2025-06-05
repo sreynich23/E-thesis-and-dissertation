@@ -14,101 +14,137 @@
                 <th class="py-2 px-4 text-left">Major ID</th>
                 <th class="py-2 px-4 text-left">Generation</th>
                 <th class="py-2 px-4 text-left">Year</th>
+                <th class="py-2 px-4 text-left">Cover</th>
                 <th class="py-2 px-4 text-left">PDF</th>
                 <th class="py-2 px-4 text-left">Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($books as $index => $book)
+            @foreach ($books as $book)
                 @php
                     $major = App\Models\Major::find($book->id_majors);
                 @endphp
                 <tr class="border-b hover:bg-gray-50">
                     <td class="py-2 px-4">{{ $book->title }}</td>
-                    <td class="py-2 px-4">{{ $major ? $major->major_name : 'Unknown Major' }}-{{ $major ? $major->khmer_name : 'Unknown Major' }}</td>
+                    <td class="py-2 px-4">
+                        {{ $major ? $major->major_name : 'Unknown Major' }} - {{ $major ? $major->khmer_name : 'Unknown Major' }}
+                    </td>
                     <td class="py-2 px-4">{{ $book->generation }}</td>
                     <td class="py-2 px-4">{{ $book->year }}</td>
                     <td class="py-2 px-4">
-                        @if ($book->path_file)
-                            <a href="{{ asset('storage/' . $book->path_file) }}" class="text-blue-500 hover:underline"
-                                target="_blank">View PDF</a>
+                        @if ($book->cover)
+                            <img src="{{ asset('storage/' . $book->cover) }}" alt="Cover" class="h-16 w-16 object-cover rounded">
                         @else
                             N/A
                         @endif
                     </td>
                     <td class="py-2 px-4">
-                        <button
-                            onclick="openUpdateBookModal({{ $book->id }}, '{{ $book->title }}', {{ $book->id_majors }}, '{{ $book->generation }}', {{ $book->year }})"
-                            class="text-blue-500 hover:underline">Edit</button>
+                        @if ($book->path_file)
+                            <a href="{{ asset('storage/' . $book->path_file) }}" target="_blank" class="text-blue-500 hover:underline">View PDF</a>
+                        @else
+                            N/A
+                        @endif
+                    </td>
+                    <td class="py-2 px-4">
+                        <button onclick="openUpdateBookModal({{ $book->id }}, '{{ addslashes($book->title) }}', {{ $book->id_majors }}, '{{ $book->generation }}', {{ $book->year }}, '{{ $book->path_file ? asset('storage/' . $book->path_file) : '' }}')" class="text-blue-500 hover:underline">
+                            Edit
+                        </button>
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
+
+    <!-- Modal -->
     <div id="modal-update-book" class="hidden fixed z-50 inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
         <div class="bg-white rounded-lg p-6 w-96 relative">
             <button onclick="closeUpdateBookModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">&times;</button>
-            <h3 class="text-lg font-semibold mb-4" id="update-book-title">Edit Book</h3>
+            <h3 class="text-lg font-semibold mb-4">Edit Book</h3>
+
             <form id="update-book-form" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-4">
                     <label for="title" class="block text-gray-700">Title</label>
-                    <input type="text" name="title" id="book_title" placeholder="Enter Book Title"
-                        class="w-full p-2 border border-gray-300 rounded mt-1" required>
+                    <input type="text" name="title" id="book_title" class="w-full p-2 border border-gray-300 rounded mt-1" required>
 
-                    <div class="mb-4">
-                        <label for="major" class="block text-gray-700">Major</label>
-                        <select name="id_majors" id="major" class="w-full p-2 border border-gray-300 rounded mt-1">
-                            @foreach ($majors as $major)
-                                <option value="{{ $major->id }}">{{ $major->major_name }} - {{ $major->khmer_name }}</option>
-                            @endforeach
-                        </select>
-                        @error('id_majors')
-                            <p class="text-red-500 text-sm">{{ $message }}</p>
-                        @enderror
-                    </div>
+                    <label for="major" class="block text-gray-700 mt-2">Major</label>
+                    <select name="id_majors" id="major" class="w-full p-2 border border-gray-300 rounded mt-1">
+                        @foreach ($majors as $major)
+                            <option value="{{ $major->id }}">{{ $major->major_name }} - {{ $major->khmer_name }}</option>
+                        @endforeach
+                    </select>
 
-                    <label for="generations" class="block text-gray-700 mt-2">Generation</label>
-                    <input type="text" name="generations" id="book_generation" placeholder="Enter Generation"
-                        class="w-full p-2 border border-gray-300 rounded mt-1" required disabled>
+                    <label for="generation" class="block text-gray-700 mt-2">Generation</label>
+                    <input type="text" name="generations" id="book_generation" class="w-full p-2 border border-gray-300 rounded mt-1">
 
                     <label for="year" class="block text-gray-700 mt-2">Year</label>
-                    <input type="number" name="year" id="book_year" placeholder="Enter Year"
-                        class="w-full p-2 border border-gray-300 rounded mt-1" required>
+                    <input type="number" name="year" id="book_year" class="w-full p-2 border border-gray-300 rounded mt-1" required>
+
+                    <label for="cover" class="block text-gray-700 mt-2">Cover Image (optional)</label>
+                    <input type="file" name="cover" id="book_cover" accept="image/*" class="w-full p-2 border border-gray-300 rounded mt-1">
 
                     <label for="path_file" class="block text-gray-700 mt-2">PDF File (optional)</label>
-                    <input type="file" name="path_file" id="book_file"
-                        class="w-full p-2 border border-gray-300 rounded mt-1">
+                    <input type="file" name="path_file" id="book_file" accept="application/pdf" class="w-full p-2 border border-gray-300 rounded mt-1">
+
+                    <div id="pdf-preview" class="mt-4 hidden">
+                        <embed id="pdf-frame" src="" type="application/pdf" class="w-full h-60 border rounded" />
+                    </div>
                 </div>
-                <div class="flex justify-end">
-                    <button type="button" class="mr-2 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-                        onclick="closeUpdateBookModal()">Cancel</button>
-                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Update Book</button>
+
+                <div class="flex justify-end mt-4">
+                    <button type="button" onclick="closeUpdateBookModal()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 mr-2">
+                        Cancel
+                    </button>
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        Update Book
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
 <script>
-    function openUpdateBookModal(id, title, majorId, generation, year) {
+    function openUpdateBookModal(id, title, majorId, generation, year, pdfUrl) {
         const modal = document.getElementById('modal-update-book');
         const form = document.getElementById('update-book-form');
+        const previewContainer = document.getElementById('pdf-preview');
+        const iframe = document.getElementById('pdf-frame');
 
-        // Set the form action dynamically
         form.action = `/books/update/${id}`;
-
-        // Populate the form fields
         document.getElementById('book_title').value = title;
         document.getElementById('major').value = majorId;
         document.getElementById('book_generation').value = generation;
         document.getElementById('book_year').value = year;
 
-        // Show the modal
+        if (pdfUrl && pdfUrl.endsWith('.pdf')) {
+            iframe.src = pdfUrl;
+            previewContainer.classList.remove('hidden');
+        } else {
+            iframe.src = '';
+            previewContainer.classList.add('hidden');
+        }
+
         modal.classList.remove('hidden');
     }
 
     function closeUpdateBookModal() {
-        const modal = document.getElementById('modal-update-book');
-        modal.classList.add('hidden');
+        document.getElementById('modal-update-book').classList.add('hidden');
+        document.getElementById('pdf-frame').src = '';
     }
+
+    document.getElementById('book_file').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        const previewContainer = document.getElementById('pdf-preview');
+        const iframe = document.getElementById('pdf-frame');
+
+        if (file && file.type === "application/pdf") {
+            const fileURL = URL.createObjectURL(file);
+            iframe.src = fileURL;
+            previewContainer.classList.remove('hidden');
+        } else {
+            iframe.src = '';
+            previewContainer.classList.add('hidden');
+        }
+    });
 </script>

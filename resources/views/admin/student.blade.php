@@ -1,6 +1,11 @@
 <div class="container mt-5">
     <div class="d-flex justify-content-end mb-4">
         <button class="absolute right-0 mr-4 bg-green-500 text-white px-6 py-2 rounded" onclick="openModals()">
+            Add Admin
+        </button>
+    </div>
+    <div class="d-flex justify-content-end mb-4">
+        <button class="absolute right-0 mr-4 bg-green-500 text-white px-6 py-2 rounded" onclick="openModals()">
             Add Student
         </button>
     </div>
@@ -22,11 +27,13 @@
                         <td>{{ $student->name }}</td>
                         <td>{{ $student->id_number }}</td>
                         <td class="d-flex justify-content-around">
-                            <button onclick="openEditModal({{ $student->id }}, '{{ $student->name }}', '{{ $student->id_number }}')"
+                            <button
+                                onclick="openEditModal({{ $student->id }}, '{{ $student->name }}', '{{ $student->id_number }}')"
                                 class="btn btn-warning btn-sm shadow-sm" title="Edit Student">
                                 <i class="fas fa-edit"></i> Edit
                             </button>
-                            <form action="{{ route('students.destroy', $student->id) }}" method="POST" style="display:inline;">
+                            <form action="{{ route('students.destroy', $student->id) }}" method="POST"
+                                style="display:inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm shadow-sm" title="Delete Student"
@@ -71,11 +78,13 @@
             @method('PUT')
             <div class="mb-3">
                 <label>Name</label>
-                <input type="text" name="name" id="edit-name" class="w-full p-2 border border-gray-300 rounded mt-1" required>
+                <input type="text" name="name" id="edit-name"
+                    class="w-full p-2 border border-gray-300 rounded mt-1" required>
             </div>
             <div class="mb-3">
                 <label>ID Number</label>
-                <input type="text" name="id_number" id="edit-id-number" class="w-full p-2 border border-gray-300 rounded mt-1" required>
+                <input type="text" name="id_number" id="edit-id-number"
+                    class="w-full p-2 border border-gray-300 rounded mt-1" required>
             </div>
             <div class="mb-3">
                 <label>Password (Leave empty to keep existing)</label>

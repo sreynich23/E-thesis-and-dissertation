@@ -11,6 +11,7 @@ class Book extends Model
     protected $fillable = [
         'id_majors',
         'generation',
+        'cover',
         'year',
         'title',
         'path_file',
