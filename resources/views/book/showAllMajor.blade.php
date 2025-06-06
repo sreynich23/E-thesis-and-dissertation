@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Khmer+OS+Siemreap&display=swap" rel="stylesheet">
 </head>
 
-<body x-data="{ Major: 'Major', Generation: 'Generation', Year: 'Year', search: '', showProfile: false }">
+<body>
     <nav class="border-b text-black sticky">
         <img src="{{ asset('storage/logo/navbar.png') }}" class="w-full">
     </nav>
@@ -28,10 +28,7 @@
         @else
             <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
                 @foreach ($major->books as $book)
-                    <a href="{{ route('books.show', $book->id) }}" class="bg-white shadow-lg w-28 lg:w-40 flex-shrink-0"
-                        x-show="(Generation === '{{ $book->generation }}' || Generation === 'Generation') &&
-                                        (Year === '{{ $book->year }}' || Year === 'Year')
-">
+                    <a href="{{ route('books.show', $book->id) }}" class="bg-white shadow-lg w-28 lg:w-40 flex-shrink-0">
                         <img src="{{ asset('storage/' . $book->cover) }}" alt="Cover of {{ $book->title }}"
                             class="w-full object-cover mb-4">
                         <p class="font-medium text-xs md:text-sm lg:text-sm text-gray-800 p-1 overflow-hidden text-ellipsis line-clamp-3"

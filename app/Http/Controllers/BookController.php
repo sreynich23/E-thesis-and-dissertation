@@ -8,7 +8,9 @@ use App\Models\Generation;
 use App\Models\Major;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use setasign\Fpdi\Tcpdf\Fpdi;
@@ -19,7 +21,7 @@ class BookController extends Controller
     {
         $generations = Book::all()->groupBy('generation');
         $years = Book::all()->groupBy('year');
-        $books = Book::all();
+        $books = Book::latest()->get();
         $majors = Major::all();
         $groupedMajors = Major::all()->groupBy('degree_level');
         $groupedBooks = Book::all()->groupBy('id_majors');
@@ -38,12 +40,10 @@ class BookController extends Controller
     {
         $generations = Book::all()->groupBy('generation');
         $years = Book::all()->groupBy('year');
-        $books = Book::all();
-        $majors = Major::all();
-        $groupedMajors = Major::all()->groupBy('degree_level');
-        $groupedBooks = Book::all()->join('id_majors');
+        $books = Book::latest()->get();
         $book = Book::findOrFail($id);
-        return view('book.show', compact('book', 'groupedMajors', 'majors', 'groupedBooks', 'generations', 'years'));
+        $major = Major::findOrFail($book->id_majors);
+        return view('book.show', compact('book', 'major', 'generations', 'years'));
     }
     public function showMajor($id)
     {
@@ -202,5 +202,24 @@ class BookController extends Controller
         $major->save();
 
         return redirect()->back()->with('success', 'Major updated successfully!');
+    }
+
+    public function updateSettings(Request $request)
+    {
+        $admin = Auth::user();
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'password' => 'nullable|confirmed|min:6',
+        ]);
+        $userModel = \App\Models\User::find($admin->id);
+        $userModel->name = $request->name;
+        $userModel->email = $request->email;
+        if ($request->filled('password')) {
+            $userModel->password = Hash::make($request->password);
+        }
+        $userModel->save();
+
+        return back()->with('success', 'Settings updated successfully.');
     }
 }

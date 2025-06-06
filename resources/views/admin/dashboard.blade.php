@@ -58,6 +58,10 @@
                     onclick="highlightSidebarItem(this,'student')">
                     <i class="fas fa-user"></i><span class="opacity-0">Student</span>
                 </button>
+                <button class="px-3 flex items-center space-x-4 text-gray-950 bottom-0 mb-4 w-full"
+                    onclick="highlightSidebarItem(this,'settings')">
+                    <i class="fas fa-cog"></i><span class="opacity-0">Settings</span>
+                </button>
             </div>
         </div>
         <!-- Main Content -->
@@ -76,6 +80,9 @@
             </div>
             <div id="update_book" class="page hidden">
                 @include('admin.book')
+            </div>
+            <div id="settings" class="page hidden">
+                @include('admin.settings')
             </div>
         </div>
     </div>

@@ -24,47 +24,67 @@
     </button>
 
 
-    <div class="flex">
-        <div class="container mx-auto p-6 h-screen">
-            <div class="lg:flex justify-between items-center mb-4 bg-white">
-                <h1
-                    class="text-base md:text-xl lg:text-2xl font-bold text-cyan-500 mb-4"style="font-family: 'Khmer OS Siemreap', sans-serif;">
-                    {{ $book->title }}</h1>
-                {{-- @if (Auth::check())
-                    <a href="{{ route('books.download', $book->id) }}" class="pr-20">
-                        <button
-                            class="bg-blue-500 text-white lg:px-4 lg:py-2 px-2 py-1 rounded-md text-xs md:text-sm lg:text-lg">
-                            Download
-                        </button>
-                    </a>
-                @else
-                    <a href="{{ route('login') }}" class="pr-20">
-                        <button
-                            class="bg-blue-500 text-white lg:px-4 lg:py-2 px-2 py-1 rounded-md text-xs md:text-sm lg:text-lg">
-                            Download
-                        </button>
-                    </a>
-                @endif --}}
-                <a href="{{ route('books.download', $book->id) }}" class="pr-20">
+    <div class="lg:flex">
+    <!-- Left Content Area -->
+    <div class="container mx-auto p-6 lg:w-3/4 w-full">
+        <!-- Header Section -->
+        <div class="lg:flex justify-between items-center mb-4 bg-white">
+            <h1 class="text-base md:text-xl lg:text-2xl font-bold text-cyan-500 mb-4"
+                style="font-family: 'Khmer OS Siemreap', sans-serif;">
+                {{ $book->title }}
+            </h1>
+            @if (Auth::check())
+                <a href="{{ route('books.download', $book->id) }}" class="lg:pr-20">
                     <button
                         class="bg-blue-500 text-white lg:px-4 lg:py-2 px-2 py-1 rounded-md text-xs md:text-sm lg:text-lg">
                         Download
                     </button>
                 </a>
-            </div>
-            <div class="h-screen w-4/6 justify-self-center">
-                @if ($book->path_file && Storage::disk('public')->exists($book->path_file))
-                    <embed src="{{ asset('storage/' . $book->path_file) }}#toolbar=0&navpanes=0&scrollbar=0&view=FitV&page=1"
-                        type="application/pdf"
-                        class="h-96 lg:w-full lg:h-full border-none justify-self-center bg-white" />
-                @else
-                    <p class="text-red-500">The requested resource was not found on this server.</p>
-                @endif
-            </div>
+            @else
+                <a href="{{ route('login') }}" class="lg:pr-20">
+                    <button
+                        class="bg-blue-500 text-white lg:px-4 lg:py-2 px-2 py-1 rounded-md text-xs md:text-sm lg:text-lg">
+                        Download
+                    </button>
+                </a>
+            @endif
+        </div>
 
+        <!-- PDF Viewer Section -->
+        <div class="w-full h-[500px] lg:h-screen">
+            @if ($book->path_file && Storage::disk('public')->exists($book->path_file))
+                <embed
+                    src="{{ asset('storage/' . $book->path_file) }}#toolbar=0&navpanes=0&scrollbar=0&view=FitV&page=1"
+                    type="application/pdf"
+                    class="w-full h-full border-none bg-white" />
+            @else
+                <p class="text-red-500">The requested resource was not found on this server.</p>
+            @endif
         </div>
     </div>
-    </div>
+
+<div class="lg:w-1/4 w-full lg:h-screen lg:overflow-y-auto p-6 bg-gray-100">
+    @if ($major->books->isEmpty())
+        <p>No books found for this major.</p>
+    @else
+        <div class="flex lg:grid gap-4 overflow-x-auto lg:overflow-visible whitespace-nowrap lg:whitespace-normal lg:grid-cols-2">
+            @foreach ($major->books as $book)
+                <a href="{{ route('books.show', $book->id) }}"
+                    class="bg-white shadow-lg w-40 inline-block lg:w-full flex-shrink-0">
+                    <img src="{{ asset('storage/' . $book->cover) }}" alt="Cover of {{ $book->title }}"
+                        class="w-full object-cover mb-4">
+                    <p class="font-medium text-xs md:text-sm lg:text-sm text-gray-800 p-1 overflow-hidden text-ellipsis line-clamp-3"
+                        style="font-family: 'Khmer OS Siemreap', sans-serif;">
+                        {{ $book->title }}
+                    </p>
+                </a>
+            @endforeach
+        </div>
+    @endif
+</div>
+
+</div>
+
 </body>
 
 </html>

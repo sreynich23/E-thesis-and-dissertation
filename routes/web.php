@@ -34,6 +34,7 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
     Route::post('/cover/store', [CoverController::class, 'store'])->name('covers.store');
     Route::post('/cover/edit/{id}', [CoverController::class, 'edit'])->name('covers.edit');
     Route::delete('/cover/delete/{id}', [CoverController::class, 'destroy'])->name('covers.destroy');
+    Route::post('/admin/settings/update', [BookController::class, 'updateSettings'])->name('settings.update');
 });
 
 
