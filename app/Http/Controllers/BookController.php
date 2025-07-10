@@ -18,24 +18,44 @@ use setasign\Fpdi\Tcpdf\Fpdi;
 class BookController extends Controller
 {
     public function index()
-    {
-        $generations = Book::all()->groupBy('generation');
-        $years = Book::all()->groupBy('year');
-        $books = Book::latest()->get();
-        $majors = Major::all();
-        $groupedMajors = Major::all()->groupBy('degree_level');
-        $groupedBooks = Book::all()->groupBy('id_majors');
-        $students = Student::all();
-        $covers = Cover::all();
-        $bookCount = $books->count();
-        $bookCountsByDegree = DB::table('books')
-            ->join('majors', 'books.id_majors', '=', 'majors.id')
-            ->select('majors.degree_level', DB::raw('count(books.id) as total_books'))
-            ->groupBy('majors.degree_level')
-            ->get();
+{
+    $generations = Book::all()->groupBy('generation');
+    $years = Book::all()->groupBy('year');
+    $books = Book::latest()->get();
+    $covers = Cover::all();
+    $students = Student::all();
+    $bookCount = $books->count();
 
-        return view('book.home', compact('books', 'groupedMajors', 'students', 'majors', 'groupedBooks', 'generations', 'years', 'covers', 'bookCount', 'bookCountsByDegree'));
-    }
+    // Step 1: Count books per major and sort descending
+    $majorsWithCounts = Major::withCount('books')->orderByDesc('books_count')->get();
+
+    // Step 2: Group books by major ID
+    $groupedBooks = Book::all()->groupBy('id_majors');
+
+    // Step 3: Group majors by degree level (optional, keep if needed for UI)
+    $groupedMajors = $majorsWithCounts->groupBy('degree_level');
+
+    // Step 4: Count books by degree level (optional)
+    $bookCountsByDegree = DB::table('books')
+        ->join('majors', 'books.id_majors', '=', 'majors.id')
+        ->select('majors.degree_level', DB::raw('count(books.id) as total_books'))
+        ->groupBy('majors.degree_level')
+        ->get();
+
+    return view('book.home', compact(
+        'books',
+        'groupedMajors',
+        'students',
+        'majorsWithCounts',
+        'groupedBooks',
+        'generations',
+        'years',
+        'covers',
+        'bookCount',
+        'bookCountsByDegree'
+    ));
+}
+
     public function show($id)
     {
         $generations = Book::all()->groupBy('generation');
@@ -52,17 +72,42 @@ class BookController extends Controller
         return view('book.showAllMajor', compact('major', 'books'));
     }
     public function indexAdmin()
-    {
-        $generations = Book::all()->groupBy('generation');
-        $years = Book::all()->groupBy('year');
-        $books = Book::all();
-        $majors = Major::all();
-        $groupedMajors = Major::all()->groupBy('degree_level');
-        $groupedBooks = Book::all()->groupBy('id_majors');
-        $students = Student::all();
-        $covers = Cover::all();
-        return view('admin.dashboard', compact('books', 'groupedMajors', 'students', 'majors', 'groupedBooks', 'generations', 'years', 'covers'));
-    }
+{
+    $generations = Book::all()->groupBy('generation');
+    $years = Book::all()->groupBy('year');
+    $books = Book::all();
+    $covers = Cover::all();
+    $students = Student::all();
+    $bookCount = $books->count();
+    $bookCountsByDegree = DB::table('books')
+        ->join('majors', 'books.id_majors', '=', 'majors.id')
+        ->select('majors.degree_level', DB::raw('count(books.id) as total_books'))
+        ->groupBy('majors.degree_level')
+        ->get();
+
+    // Sorted majors by book count
+    $majors = Major::withCount('books')->orderByDesc('books_count')->get();
+
+    $groupedBooks = $books->groupBy('id_majors');
+    $groupedMajors = $majors->groupBy('degree_level');
+    $majorsWithCounts = Major::withCount('books')->orderByDesc('books_count')->get();
+
+
+    return view('admin.dashboard', compact(
+        'books',
+        'groupedMajors',
+        'students',
+        'majors',
+        'bookCount',
+        'bookCountsByDegree',
+        'majorsWithCounts',
+        'groupedBooks',
+        'generations',
+        'years',
+        'covers'
+    ));
+}
+
     public function showAdmin($id)
     {
         $book = Book::findOrFail($id);

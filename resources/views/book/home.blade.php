@@ -170,26 +170,45 @@
     </div>
     <!-- Books Display -->
     <div class="w-full lg:w-full p-6">
-        <div class="text-xs md:text-sm lg:text-lg font-semibold text-red-800 my-4 flex rounded-sm border-2 border-red-800 p-2 w-fit">
-            Total Books: {{ $bookCount }}
-            @foreach ($bookCountsByDegree as $item)
-                <div>
-                    , {{ $item->degree_level }}: {{ $item->total_books }}
-                </div>
-            @endforeach
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4">
+    <div class="bg-white rounded-xl shadow p-4 flex justify-between items-start">
+        <div>
+            <p class="text-sm font-semibold text-gray-600" style="font-family: 'Khmer OS Siemreap', sans-serif;">
+                សៀវភៅសរុប
+            </p>
+            <h2 class="text-2xl font-bold text-gray-900 mt-2">{{ $bookCount }}</h2>
         </div>
-        <div class="gap-2 overflow-x-auto flex space-x-1 pb-4 grid-cols-5" x-show="search.trim() !== ''">
+        <div class="text-red-600 text-2xl">
+            <i class="fas fa-book"></i> <!-- Font Awesome icon -->
+        </div>
+    </div>
+
+    @foreach ($bookCountsByDegree as $item)
+        <div class="bg-white rounded-xl shadow p-4 flex justify-between items-start">
+            <div>
+                <p class="text-sm font-semibold text-gray-600" style="font-family: 'Khmer OS Siemreap', sans-serif;">
+                    {{ $item->degree_level }}
+                </p>
+                <h2 class="text-2xl font-bold text-gray-900 mt-2">{{ $item->total_books }}</h2>
+            </div>
+            <div class="text-blue-600 text-2xl">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+        </div>
+    @endforeach
+</div>
+
+        <div class="gap-2 overflow-x-auto flex space-x-1 pb-4" x-show="search.trim() !== ''">
             @foreach ($books as $book)
                 <a href="{{ route('books.show', $book->id) }}" class="bg-white shadow-lg w-28 lg:w-40 flex-shrink-0"
                     x-show="'{{ strtolower($book->title) }}'.includes(search.toLowerCase())">
                     @if ($book->path_file && Storage::disk('public')->exists($book->path_file))
-                        <div style="overflow: hidden;">
-                            <object
-                                data="{{ asset('storage/' . $book->path_file) }}#toolbar=0&navpanes=0&scrollbar=0&view=FitV&page=1"
-                                type="application/pdf" class="h-48 lg:h-60 border-none justify-self-center bg-white"
-                                style="pointer-events: none;">
-                            </object>
-                        </div>
+                        <img src="{{ asset('storage/' . $book->cover) }}"
+                                            alt="Cover of {{ $book->title }}" class="w-full object-cover mb-4">
+                                        <p class="font-medium text-xs md:text-sm lg:text-sm text-gray-800 p-1 overflow-hidden"
+                                            style="font-family: 'Khmer OS Siemreap', sans-serif; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-height: 1.4em; max-height: 4.2em;">
+                                            {{ $book->title }}
+                                        </p>
                     @else
                         <p class="text-red-500">The requested resource was not found on this server.</p>
                     @endif
@@ -222,23 +241,22 @@
                                 <a href="{{ route('books.showMajor', $major->id) }}" class="text-red-800">see
                                     more</a>
                             </div>
-                            <div class="gap-2 overflow-x-auto flex space-x-1 pb-4 grid-cols-5">
-                                @foreach ($booksForMajor as $book)
-                                    <a href="{{ route('books.show', $book->id) }}"
-                                        class="bg-white shadow-lg w-28 lg:w-40"
-                                        x-show="(Generation === '{{ $book->generation }}' || Generation === 'Generation') &&
-                                         (Year === '{{ $book->year }}' || Year === 'Year')
-">
-                                        <img src="{{ asset('storage/' . $book->cover) }}"
-                                            alt="Cover of {{ $book->title }}" class="w-full object-cover mb-4">
-                                        <p class="font-medium text-xs md:text-sm lg:text-sm text-gray-800 p-1 overflow-hidden"
-                                            style="font-family: 'Khmer OS Siemreap', sans-serif; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-height: 1.4em; max-height: 4.2em;">
-                                            {{ $book->title }}
-                                        </p>
+                            <div class="flex gap-2 space-x-1 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
+    @foreach ($booksForMajor as $book)
+        <a href="{{ route('books.show', $book->id) }}"
+            class="bg-white shadow-lg w-28 lg:w-40 flex-shrink-0"
+            x-show="(Generation === '{{ $book->generation }}' || Generation === 'Generation') &&
+                     (Year === '{{ $book->year }}' || Year === 'Year')">
+            <img src="{{ asset('storage/' . $book->cover) }}"
+                alt="Cover of {{ $book->title }}" class="w-full object-cover mb-4">
+            <p class="font-medium text-xs md:text-sm lg:text-sm text-gray-800 p-1 overflow-hidden"
+                style="font-family: 'Khmer OS Siemreap', sans-serif; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-height: 1.4em; max-height: 4.2em;">
+                {{ $book->title }}
+            </p>
+        </a>
+    @endforeach
+</div>
 
-                                    </a>
-                                @endforeach
-                            </div>
                         </div>
                     @endif
                 @endforeach

@@ -33,35 +33,63 @@
             <p class="text-center text-gray-500">No images uploaded yet.</p>
         @endif
     </div>
-    <div class="p-6">
-        @foreach ($groupedBooks as $id_majors => $books)
-            @php
-                $major = App\Models\Major::find($id_majors);
-            @endphp
-            <h1 class="text-3xl font-bold text-cyan-500 mb-6" style="font-family: 'Khmer OS Siemreap', sans-serif;">{{ $major ? $major->major_name : 'Unknown Major' }}</h1>
-            <div class="gap-2 overflow-x-auto flex space-x-1 pb-4">
-                @foreach ($books as $book)
-                    <div class="bg-white shadow-lg w-28 lg:w-40 flex-shrink-0">
-                        @if ($book->path_file && Storage::disk('public')->exists($book->path_file))
-                                <div style="overflow: hidden;">
-                                    <embed
-                                        src="{{ asset('storage/' . $book->path_file) }}#toolbar=0&navpanes=0&scrollbar=0&view=FitV&page=1"
-                                        type="application/pdf"
-                                        class="h-60 border-none justify-self-center bg-white"
-                                        style="pointer-events: none;" />
-                                </div>
-                            @else
-                                <p class="text-red-500">The requested resource was not found on this server.</p>
-                            @endif
-
-                            <p class="font-medium text-xs md:text-sm lg:text-sm text-gray-800 p-1 overflow-hidden text-ellipsis line-clamp-3" style="font-family: 'Khmer OS Siemreap', sans-serif;">
-                                {{ $book->title }}
-                            </p>
-                    </div>
-                @endforeach
-            </div>
-        @endforeach
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4">
+    <div class="bg-white rounded-xl shadow p-4 flex justify-between items-start">
+        <div>
+            <p class="text-sm font-semibold text-gray-600" style="font-family: 'Khmer OS Siemreap', sans-serif;">
+                សៀវភៅសរុប
+            </p>
+            <h2 class="text-2xl font-bold text-gray-900 mt-2">{{ $bookCount }}</h2>
+        </div>
+        <div class="text-red-600 text-2xl">
+            <i class="fas fa-book"></i> <!-- Font Awesome icon -->
+        </div>
     </div>
+
+    @foreach ($bookCountsByDegree as $item)
+        <div class="bg-white rounded-xl shadow p-4 flex justify-between items-start">
+            <div>
+                <p class="text-sm font-semibold text-gray-600" style="font-family: 'Khmer OS Siemreap', sans-serif;">
+                    {{ $item->degree_level }}
+                </p>
+                <h2 class="text-2xl font-bold text-gray-900 mt-2">{{ $item->total_books }}</h2>
+            </div>
+            <div class="text-blue-600 text-2xl">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+        </div>
+    @endforeach
+</div>
+
+    @foreach ($majorsWithCounts as $major)
+    @php
+        $books = $groupedBooks[$major->id] ?? collect();
+    @endphp
+
+    @if ($books->isNotEmpty())
+        <h1 class="text-3xl font-bold text-cyan-500 mb-6" style="font-family: 'Khmer OS Siemreap', sans-serif;">
+            {{ $major->major_name }}
+        </h1>
+
+        <div class="gap-2 overflow-x-auto flex space-x-1 pb-4">
+            @foreach ($books as $book)
+                <div class="bg-white shadow-lg w-28 lg:w-40 flex-shrink-0">
+                    @if ($book->path_file && Storage::disk('public')->exists($book->path_file))
+                        <img src="{{ asset('storage/' . $book->cover) }}"
+                             alt="Cover of {{ $book->title }}" class="w-full object-cover mb-4">
+                        <p class="font-medium text-xs md:text-sm lg:text-sm text-gray-800 p-1 overflow-hidden"
+                           style="font-family: 'Khmer OS Siemreap', sans-serif; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-height: 1.4em; max-height: 4.2em;">
+                            {{ $book->title }}
+                        </p>
+                    @else
+                        <p class="text-red-500">The requested resource was not found on this server.</p>
+                    @endif
+                </div>
+            @endforeach
+        </div>
+    @endif
+@endforeach
+
 </div>
 <script>
     const slider = document.getElementById('slider');

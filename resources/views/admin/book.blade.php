@@ -6,6 +6,34 @@
             {{ session('success') }}
         </div>
     @endif
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4">
+    <div class="bg-white rounded-xl shadow p-4 flex justify-between items-start">
+        <div>
+            <p class="text-sm font-semibold text-gray-600" style="font-family: 'Khmer OS Siemreap', sans-serif;">
+                សៀវភៅសរុប
+            </p>
+            <h2 class="text-2xl font-bold text-gray-900 mt-2">{{ $bookCount }}</h2>
+        </div>
+        <div class="text-red-600 text-2xl">
+            <i class="fas fa-book"></i> <!-- Font Awesome icon -->
+        </div>
+    </div>
+
+    @foreach ($bookCountsByDegree as $item)
+        <div class="bg-white rounded-xl shadow p-4 flex justify-between items-start">
+            <div>
+                <p class="text-sm font-semibold text-gray-600" style="font-family: 'Khmer OS Siemreap', sans-serif;">
+                    {{ $item->degree_level }}
+                </p>
+                <h2 class="text-2xl font-bold text-gray-900 mt-2">{{ $item->total_books }}</h2>
+            </div>
+            <div class="text-blue-600 text-2xl">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+        </div>
+    @endforeach
+</div>
+
 
     <table class="min-w-full bg-white shadow-md rounded-md">
         <thead>
